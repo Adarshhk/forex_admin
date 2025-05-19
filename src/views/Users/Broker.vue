@@ -2,6 +2,17 @@
 <template>
     <Modal @close="handleClose" :modelValue="props.isOpen">
         <div class="w-[80dvw]">
+            <div class="flex items-center justify-between p-4 border-b border-white/15">
+                <div class="flex items-center gap-4">
+                    <!-- Toggle is moved to parent component -->
+                    <div class="flex items-center justify-between ">
+                        <div class="flex items-center gap-4">
+                            <h1 class="font-bold text-lg">User Brokers</h1>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
             <div class="table-container  min-h-[50vh]">
                 <table class="w-full whitespace-nowrap overflow-x-auto">
                     <thead class="border">
@@ -85,37 +96,37 @@ const props = defineProps({
 })
 
 watchEffect(async () => {
-    if (props.userId) {
+    if (props.userId && props.isOpen) {
         await brokerStore.getBrokerByUserId(props.userId);
     }
 })
 
 const handleDeleteBroker = async () => {
-  await brokerStore.deleteBroker();
-  isDeleteModalOpen.value = false;
+    await brokerStore.deleteBroker();
+    isDeleteModalOpen.value = false;
 };
 
 const handleConnect = async (id) => {
-  await brokerStore.connectBroker(id);
+    await brokerStore.connectBroker(id);
 };
 
 const openDeleteModal = (id) => {
-  idForDelete.value = id;
-  isDeleteModalOpen.value = true;
+    idForDelete.value = id;
+    isDeleteModalOpen.value = true;
 };
 
 const openEditModal = (broker) => {
-  editBrokerData.value = broker;
-  isEditModalOpen.value = true;
+    editBrokerData.value = broker;
+    isEditModalOpen.value = true;
 };
 
 const closeEditModal = () => {
-  editBrokerData.value = null;
-  isEditModalOpen.value = false;
+    editBrokerData.value = null;
+    isEditModalOpen.value = false;
 };
 
 const handleActiveToggle = async (broker) => {
-  brokerStore.addEditBroker(broker.id, { is_enabled: broker.is_enabled });
+    brokerStore.addEditBroker(broker.id, { is_enabled: broker.is_enabled });
 };
 
 const handleClose = () => {

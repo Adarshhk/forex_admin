@@ -8,6 +8,7 @@ export const useManualOrderStore = defineStore('manual_order', () => {
     const manualOrders = ref([]);
     const brokerFilterValues = ref([]);
     const userManualOrders = ref([]);
+    const strategyManualOrders = ref([]);
 
     const getManualOrders = async () => {
 
@@ -34,6 +35,18 @@ export const useManualOrderStore = defineStore('manual_order', () => {
              console.log(error, 'Error in manual order store.')
         }
     }
+
+    const getOrderByStrategyId = async (strategyId) => {
+        try {
+            const res = await makeRequest(endpoint , 'GET' , {} , {} , {} , 0 , strategyId , 'strategy');
+            if(res.data)
+            {
+                strategyManualOrders.value = res.data;
+            }
+        } catch (error) {
+             console.log(error, 'Error in manual order store.')
+        }
+    }
  
 
     function getUniqueBrokers(orders) {
@@ -51,10 +64,13 @@ export const useManualOrderStore = defineStore('manual_order', () => {
         return Array.from(uniqueMap.values());
     }
 
+    getManualOrders();
 
     return {
         getManualOrders,
         getOrderByuserId,
+        getOrderByStrategyId,
+        strategyManualOrders,
         userManualOrders,
         manualOrders,
         brokerFilterValues,

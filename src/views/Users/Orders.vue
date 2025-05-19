@@ -1,14 +1,14 @@
 <!-- ManualOrders.vue - Handles manual orders display and filtering -->
 <template>
     <Modal @close="handleClose" :modelValue="props.isOpen">
-        <div class="class="w-[80dvw]"">
+        <div class="w-[80dvw]">
             <!-- header with filters -->
             <div class="flex items-center justify-between p-4 border-b border-white/15">
                 <div class="flex items-center gap-4">
                     <!-- Toggle is moved to parent component -->
                     <div class="flex items-center justify-between ">
                         <div class="flex items-center gap-4">
-                            <h1 class="font-bold text-lg">Orders</h1>
+                            <h1 class="font-bold text-lg">User Orders</h1>
                         </div>
                     </div>
                 </div>
@@ -89,7 +89,7 @@ const props = defineProps({
 })
 
 watchEffect(async () => {
-    if (props.userId) {
+    if (props.userId && props.isOpen) {
         await orderStore.getOrderByuserId(props.userId);
     }
 })

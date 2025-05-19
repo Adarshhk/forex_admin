@@ -34,7 +34,10 @@ let { strategies } = storeToRefs(strategiesStore);
   const strategyFilterValue = ref([]);
   const brokerFilterValue = ref([]);
   let dataForSqOff = ref(null);
-  const totalPnlClass = ref('')
+  const totalPnlClass = ref('');
+  const userPositions = ref([]);
+
+  const strategyPositions = ref([]);
   // watch(strategies, () => {
   //   strategiesPositions.value = computeStrategiesPositions();
   // })
@@ -240,6 +243,28 @@ function groupPositionsByStrategyId(positions, strategies) {
     }
   }
 
+   const getPositionByUserId = async (userId) => {
+        try {
+            const res = await makeRequest(endpoint, 'GET', {}, {}, {}, 0, userId, 'users');
+            if (res.data) {
+                userPositions.value = res.data;
+            }
+        } catch (error) {
+            console.log(error, 'Error in position store.')
+        }
+    }
+
+    const getPositionByStrategyId = async (strategyId) => {
+        try {
+            const res = await makeRequest(endpoint, 'GET', {}, {}, {}, 0, strategyId, 'strategy');
+            if (res.data) {
+                strategyPositions.value = res.data;
+            }
+        } catch (error) {
+            console.log(error, 'Error in position store.')
+        }
+    }
+
 
 
   getPositions()
@@ -247,6 +272,10 @@ function groupPositionsByStrategyId(positions, strategies) {
   return {
     getPositions,
     strategyFilterValue,
+    getPositionByUserId,
+    getPositionByStrategyId,
+    strategyPositions,
+    userPositions,
     brokerFilterValue,
     mainPositions,
     sqOffPosition,

@@ -7,6 +7,8 @@ export const useManualPositionStore = defineStore('manual_position', () => {
     const endpoint = 'manualPosition';
     const manualPositions = ref([]);
     const brokerFilterValues = ref([]);
+    const userPositions = ref([]);
+    const strategyPositions = ref([]);
 
     const getManualPosition = async () => {
 
@@ -38,8 +40,36 @@ export const useManualPositionStore = defineStore('manual_position', () => {
         return Array.from(uniqueMap.values());
     }
 
+
+    const getPositionByUserId = async (userId) => {
+        try {
+            const res = await makeRequest(endpoint, 'GET', {}, {}, {} , 0 , userId, 'users');
+            if (res.data) {
+                userPositions.value = res.data;
+            }
+        } catch (error) {
+            console.log(error, 'Error in position store.')
+        }
+    }
+
+     const getPositionByStrategyId = async (strategyId) => {
+        try {
+            const res = await makeRequest(endpoint, 'GET', {}, {}, {}, 0, strategyId, 'strategy');
+            if (res.data) {
+                strategyPositions.value = res.data;
+            }
+        } catch (error) {
+            console.log(error, 'Error in position store.')
+        }
+    }
+
+    getManualPosition()
     return {
         getManualPosition,
+        getPositionByUserId,
+        getPositionByStrategyId,
+        strategyPositions,
+        userPositions,
         manualPositions,
         brokerFilterValues,
     }

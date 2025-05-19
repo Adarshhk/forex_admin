@@ -138,11 +138,11 @@
 
     <!-- You would need to create these modals for each option -->
     <Broker :isOpen="optionChoice === 'brokers'" :userId="selectedUserId" @close="closeOptionModal" />
-    <!-- <ManualPosition :isOpen="optionChoice === 'manual_position'" :userId="selectedUserId" @close="closeOptionModal" /> -->
-    <!-- <Position :isOpen="optionChoice === 'positions'" :userId="selectedUserId" @close="closeOptionModal" /> -->
+    <ManualPosition :isOpen="optionChoice === 'manual_position'" :userId="selectedUserId" @close="closeOptionModal" />
+    <Position :isOpen="optionChoice === 'positions'" :userId="selectedUserId" @close="closeOptionModal" />
     <ManualOrders :isOpen="optionChoice === 'manual_orders'" :userId="selectedUserId" @close="closeOptionModal" />
     <Orders :isOpen="optionChoice === 'orders'" :userId="selectedUserId" @close="closeOptionModal" />
-    <!-- <Subscription :isOpen="optionChoice === 'subscriptions'" :userId="selectedUserId" @close="closeOptionModal" /> -->
+    <Subscription :isOpen="optionChoice === 'subscriptions'" :userId="selectedUserId" @close="closeOptionModal" />
     <!-- <Joiner :isOpen="optionChoice === 'joiners'" :userId="selectedUserId" @close="closeOptionModal" /> -->
   </main>
 </template>
@@ -170,7 +170,6 @@ const selectedUserId = ref(null);
 // Modal states
 const isDeleteModalOpen = ref(false);
 const isAddEditModalOpen = ref(false);
-const showOptions = ref(false);
 
 const userStore = useUserStore();
 
@@ -207,19 +206,6 @@ const handleActiveToggle = async (item) => {
   userToEdit.value = null
 }
 
-// Options menu functions
-const toggleOptionsMenu = (userId) => {
-  console.log(userId)
-  if (activeOptionsMenu.value === userId) {
-    activeOptionsMenu.value = null;
-  } else {
-    activeOptionsMenu.value = userId;
-  }
-}
-
-const closeOptionsMenu = () => {
-  activeOptionsMenu.value = null;
-}
 
 const selectOption = (option, userId) => {
   optionChoice.value = option;
@@ -232,20 +218,6 @@ const closeOptionModal = () => {
   selectedUserId.value = null;
 }
 
-// Click outside directive
-const vClickOutside = {
-  beforeMount(el, binding) {
-    el.clickOutsideEvent = (event) => {
-      if (!(el === event.target || el.contains(event.target))) {
-        binding.value(event);
-      }
-    };
-    document.addEventListener('click', el.clickOutsideEvent);
-  },
-  unmounted(el) {
-    document.removeEventListener('click', el.clickOutsideEvent);
-  },
-};
 </script>
 
 <style scoped></style>

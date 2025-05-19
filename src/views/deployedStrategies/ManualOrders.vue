@@ -8,7 +8,7 @@
                     <!-- Toggle is moved to parent component -->
                     <div class="flex items-center justify-between ">
                         <div class="flex items-center gap-4">
-                            <h1 class="font-bold text-lg">User Manual Orders</h1>
+                            <h1 class="font-bold text-lg">Strategy Manual Orders</h1>
                         </div>
                     </div>
                 </div>
@@ -16,12 +16,12 @@
             </div>
 
             <!-- order list -->
-            <OrderRow v-if="userManualOrders.length" :order="order" v-for="order in userManualOrders" :key="order.id" />
+            <OrderRow v-if="strategyManualOrders.length" :order="order" v-for="order in strategyManualOrders" :key="order.id" />
             <EmptyState v-else />
 
             <!-- mobile view -->
             <div class="md:hidden border-t border-white/15">
-                <div v-if="userManualOrders.length" v-for="item in userManualOrders" :key="item.id"
+                <div v-if="strategyManualOrders.length" v-for="item in strategyManualOrders" :key="item.id"
                     class="flex justify-between text-sm w-full px-4 py-2 border-b border-white/20">
                     <div>
                         <div class="flex space-x-1 mb-1.5 ">
@@ -80,25 +80,23 @@ import Modal from '@/components/Modal.vue';
 
 // Get manual order data from store
 const manualOrderStore = useManualOrderStore();
-const { userManualOrders } = storeToRefs(manualOrderStore);
+const { strategyManualOrders } = storeToRefs(manualOrderStore);
 
 const emit = defineEmits(['close']);
 
 const props = defineProps({
-    userId: String,
+    strategyId: String,
     isOpen: Boolean
 })
 
 watchEffect(async () => {
-    if (props.userId && props.isOpen) {
-        await manualOrderStore.getOrderByuserId(props.userId);
+    if (props.strategyId && props.isOpen) {
+        await manualOrderStore.getOrderByStrategyId(props.strategyId);
     }
 })
 
 const handleClose = () => {
-    userManualOrders.value = []
+    strategyManualOrders.value = []
     emit("close");
 }
-
-
 </script>

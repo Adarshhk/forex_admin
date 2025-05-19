@@ -20,6 +20,12 @@
                     </div>
                 </div>
             </div>
+            <div class="flex items-center gap-2">
+                <button @click="showTradeModal = true"
+                    class="flex items-center justify-center bg-gradient-to-b nrml-text from-[#00C6FF] to-[#0072FF] rounded-lg w-fit text-nowrap">
+                    <i class="p-2 lg:pl-2 pi pi-plus"></i>
+                    <p class="pr-2 hidden lg:block pl-1 py-2 nrml-text">Place Order</p>
+            </button>
             <div class="hidden md:flex items-center justify-end col-span-4 space-x-1">
                 <!-- Status Filter -->
                 <div class="relative">
@@ -68,6 +74,8 @@
                 class="flex md:hidden items-center justify-center small-btn-gradient2 p-1 xs:p-1.5 border border-white/10 rounded-[10px] xl:rounded-full text-nowrap">
                 <img src="/svg/filter.svg" alt="filter" class="w-6 h-6" />
             </button>
+            </div>
+            
         </div>
 
         <!-- order list -->
@@ -122,6 +130,7 @@
             </div>
         </div>
     </div>
+    <BuySellModal i/>
 </template>
 
 <script setup>
@@ -131,6 +140,9 @@ import { storeToRefs } from 'pinia';
 import { computed, ref } from 'vue';
 import OrderRow from './OrderRow.vue';
 import EmptyState from '@/components/EmptyState.vue';
+import BuySellModal from '@/components/BuySellModal.vue';
+import { useOrderStore } from '@/stores/matrix/orders';
+
 
 // Props to receive toggle state from parent
 const props = defineProps({
@@ -159,6 +171,8 @@ const filters = ref({
 
 // Get manual order data from store
 const manualOrderStore = useManualOrderStore();
+const orderStore = useOrderStore();
+const {showTradeModal } = storeToRefs(orderStore);
 const { manualOrders , brokerFilterValues} = storeToRefs(manualOrderStore);
 
 

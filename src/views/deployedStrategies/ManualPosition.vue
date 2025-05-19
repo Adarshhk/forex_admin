@@ -7,7 +7,7 @@
                 <!-- Toggle is moved to parent component -->
                 <div class="flex items-center justify-between ">
                     <div class="flex items-center gap-4">
-                        <h1 class="font-bold text-lg">User Manual Positions</h1>
+                        <h1 class="font-bold text-lg">Strategy Manual Positions</h1>
 
                     </div>
                 </div>
@@ -19,7 +19,7 @@
         <div>
             <div
                 class="table-container min-h-[50vh] rounded-t-xl xl:max-h-[calc(100vh-180px)] xl:pb-24 overflow-y-auto w-full">
-                <Position v-if="userPositions.length" v-for="position in userPositions" :position="position"
+                <Position v-if="strategyPositions.length" v-for="position in strategyPositions" :position="position"
                     :key="position.id" />
                 <EmptyState v-else />
             </div>
@@ -40,23 +40,23 @@ import Position from './Position.vue';
 import { useManualPositionStore } from '@/stores/matrix/manualposition';
 
 const manualPositionStore = useManualPositionStore();
-const { userPositions } = storeToRefs(manualPositionStore)
+const { strategyPositions } = storeToRefs(manualPositionStore)
 
 const emit = defineEmits(['close']);
 
 const props = defineProps({
-    userId: String,
+    strategyId: String,
     isOpen: Boolean
 })
 
 watchEffect(async () => {
-    if (props.userId && props.isOpen) {
-        await manualPositionStore.getPositionByUserId(props.userId);
+    if (props.strategyId  && props.isOpen) {
+        await manualPositionStore.getPositionByStrategyId(props.strategyId);
     }
 })
 
 const handleClose = () => {
-    userPositions.value = []
+    strategyPositions.value = []
     emit("close");
 }
 

@@ -10,7 +10,7 @@ export const useUserStore = defineStore('users', () => {
     const searchQuery = ref('');
     const idToDelete = ref(null);
     const userToEdit = ref(null);
-
+    const strategyUsers = ref([]);
 
     const getUsers = async () => {
         try {
@@ -57,10 +57,24 @@ export const useUserStore = defineStore('users', () => {
         }
     }
 
+    const getUserByStrategyId = async(strategyId) => {
+        try {
+            const res = await makeRequest(endpoint , 'GET' , {} , {} , {} , 0 , strategyId , 'strategy');
+            if(res.data)
+            {
+                strategyUsers.value = res.data;
+            }
+        } catch (error) {
+            console.log('Error in user store' , error);
+        }
+    }
+
     getUsers();
 
     return {
         getUsers,
+        getUserByStrategyId,
+        strategyUsers,
         searchQuery,
         users,
         idToDelete,

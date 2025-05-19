@@ -8,7 +8,7 @@
                     <!-- Toggle is moved to parent component -->
                     <div class="flex items-center justify-between ">
                         <div class="flex items-center gap-4">
-                            <h1 class="font-bold text-lg">User Manual Orders</h1>
+                            <h1 class="font-bold text-lg">Strategy Orders</h1>
                         </div>
                     </div>
                 </div>
@@ -16,12 +16,12 @@
             </div>
 
             <!-- order list -->
-            <OrderRow v-if="userManualOrders.length" :order="order" v-for="order in userManualOrders" :key="order.id" />
+            <OrderRow v-if="strategyOrders.length" :order="order" v-for="order in strategyOrders" :key="order.id" />
             <EmptyState v-else />
 
             <!-- mobile view -->
             <div class="md:hidden border-t border-white/15">
-                <div v-if="userManualOrders.length" v-for="item in userManualOrders" :key="item.id"
+                <div v-if="strategyOrders.length" v-for="item in strategyOrders" :key="item.id"
                     class="flex justify-between text-sm w-full px-4 py-2 border-b border-white/20">
                     <div>
                         <div class="flex space-x-1 mb-1.5 ">
@@ -71,34 +71,31 @@
 </template>
 
 <script setup>
-import { useManualOrderStore } from '@/stores/matrix/manualorder';
 import { storeToRefs } from 'pinia';
 import OrderRow from '../Orders/OrderRow.vue';
 import EmptyState from '@/components/EmptyState.vue';
 import { onMounted, watchEffect } from 'vue';
 import Modal from '@/components/Modal.vue';
+import { useOrderStore } from '@/stores/matrix/orders';
 
-// Get manual order data from store
-const manualOrderStore = useManualOrderStore();
-const { userManualOrders } = storeToRefs(manualOrderStore);
+const orderStore = useOrderStore();
+const { strategyOrders } = storeToRefs(orderStore);
 
 const emit = defineEmits(['close']);
 
 const props = defineProps({
-    userId: String,
-    isOpen: Boolean
+    strategyId: String,
+    isOpen : Boolean
 })
 
 watchEffect(async () => {
-    if (props.userId && props.isOpen) {
-        await manualOrderStore.getOrderByuserId(props.userId);
+    if (props.strategyId  && props.isOpen) {
+        await orderStore.getOrderByStrategyId(props.strategyId);
     }
 })
 
 const handleClose = () => {
-    userManualOrders.value = []
+    strategyOrders.value = []
     emit("close");
 }
-
-
 </script>

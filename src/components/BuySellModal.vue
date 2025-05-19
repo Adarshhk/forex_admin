@@ -180,17 +180,17 @@ import { ref, watch, computed, onMounted, onBeforeUnmount, watchEffect } from 'v
 import { onClickOutside } from '@vueuse/core';
 import Checkbox from './Checkbox.vue';
 import { useBrokerIndexStore } from '@/stores/matrix/brokers';
-import { useMyStrategiesStore } from '@/stores/matrix/myStrategies';
 import { useJoinerStore } from '@/stores/matrix/joiners';
+import { useStrategiesStore } from '@/stores/matrix/strategies';
 
 const orderStore = useOrderStore();
-const myStrategyStore = useMyStrategiesStore();
+const strategyStore = useStrategiesStore();
 const brokerStore = useBrokerIndexStore();
 const joinerStore = useJoinerStore();
 const tickerStore = useTickerStore();
 
-const { myStrategies } = storeToRefs(myStrategyStore);
 const { joiners } = storeToRefs(joinerStore)
+const { strategies } = storeToRefs(strategyStore);
 const { brokers } = storeToRefs(brokerStore);
 const { showTradeModal, tradeMode, scriptToTrade } = storeToRefs(orderStore);
 
@@ -206,7 +206,7 @@ const selectedItems = ref([]);
 
 // Get the appropriate list based on category
 const itemsList = computed(() => {
-    return orderCategory.value === 'strategy' ? myStrategies.value : brokers.value.map(b => { return { id: b.id, name: b.broker_name } });
+    return orderCategory.value === 'strategy' ? strategies.value : brokers.value.map(b => { return { id: b.id, name: b.broker_name } });
 });
 
 // Filter items based on search term

@@ -31,6 +31,7 @@ export const useOrderStore = defineStore('orders', () => {
   const strategyFilterValues = ref([]);
   const brokerFilterValues = ref([]);
   const userOrders = ref([]);
+  const strategyOrders = ref([]);
 
   const previousOrders = ref(0);
   const todayOrders = ref(0);
@@ -156,7 +157,18 @@ export const useOrderStore = defineStore('orders', () => {
         userOrders.value = res.data;
       }
     } catch (error) {
-      console.log(error, 'Error in manual order store.')
+      console.log(error, 'Error in  order store.')
+    }
+  }
+
+    const getOrderByStrategyId = async (strategyId) => {
+    try {
+      const res = await makeRequest(endpoint, 'GET', {}, {}, {}, 0, strategyId, 'strategy');
+      if (res.data) {
+        strategyOrders.value = res.data;
+      }
+    } catch (error) {
+      console.log(error, 'Error in  order store.')
     }
   }
 
@@ -175,6 +187,8 @@ export const useOrderStore = defineStore('orders', () => {
     getOrderByuserId,
     userOrders,
     orders,
+    getOrderByStrategyId,
+    strategyOrders,
     filterOrders, strategyFilterValues, brokerFilterValues,
     showTradeModal,
     state,
