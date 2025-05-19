@@ -1,0 +1,62 @@
+import { makeRequest } from "@/requests/requests";
+import { defineStore } from "pinia"
+import { ref } from "vue"
+
+export const useManualOrderStore = defineStore('manual_order', () => {
+
+    const endpoint = 'manualOrders';
+    const manualOrders = ref([]);
+    const brokerFilterValues = ref([]);
+    const userManualOrders = ref([]);
+
+    const getManualOrders = async () => {
+
+        try {
+            const res = await makeRequest(endpoint, 'GET');
+
+            if (res.data) {
+                manualOrders.value = res.data;
+                brokerFilterValues.value = getUniqueBrokers(manualOrders.value);
+            }
+        } catch (error) {
+            console.log(error, 'Error in manual order store.')
+        }
+    }
+
+    const getOrderByuserId = async (userId) => {
+        try {
+            const res = await makeRequest(endpoint , 'GET' , {} , {} , {} , 0 , userId , 'users');
+            if(res.data)
+            {
+                userManualOrders.value = res.data;
+            }
+        } catch (error) {
+             console.log(error, 'Error in manual order store.')
+        }
+    }
+ 
+
+    function getUniqueBrokers(orders) {
+        const uniqueMap = new Map();
+
+        orders.forEach(order => {
+            if (order.broker_id && order.broker_name && !uniqueMap.has(order.broker_id)) {
+                uniqueMap.set(order.broker_id, {
+                    broker_id: order.broker_id,
+                    broker_name: order.broker_name
+                });
+            }
+        });
+
+        return Array.from(uniqueMap.values());
+    }
+
+
+    return {
+        getManualOrders,
+        getOrderByuserId,
+        userManualOrders,
+        manualOrders,
+        brokerFilterValues,
+    }
+})
