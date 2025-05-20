@@ -53,11 +53,13 @@
 import SqOffModal from '@/components/SqOffModal.vue';
 import { usePositionsStore } from '@/stores/matrix/positions';
 import { useTickerStore } from '@/stores/matrix/ticker/ticker';
+import { storeToRefs } from 'pinia';
 import { computed, ref } from 'vue';
 
 
 const tickerStore = useTickerStore();
 const positionStore = usePositionsStore();
+const {dataForSqOff} = storeToRefs(positionStore);
 
 
 const showConfirmModal = ref(false);
@@ -72,12 +74,11 @@ const pnl = computed(() => {
 
   return calculatePNL(props.position)
 });
-
 const handleSqoff = async () => {
-
-  console.log('sqoff' , props.position.id);
-  showConfirmModal.value = false
+  dataForSqOff.value = {position_ids : [props.position.id]};
+  await positionStore.sqOffPosition()
 }
+
 
 function formatToDateOnly(dateStr) {
   const date = new Date(dateStr);

@@ -5,7 +5,10 @@ import { ref } from "vue";
 export const useJoinerStore = defineStore('joiners' , () => {
     const joiners = ref([]);
     const endpoint = 'joiners'
+   
     const selectedStrategy = ref({});
+    const strategyJoiners = ref([]);
+    const userJoiners = ref([]);
 
     const getJoiners = async () => {
         try {
@@ -56,6 +59,30 @@ export const useJoinerStore = defineStore('joiners' , () => {
         }
     }
 
+    const getJoinersByStrategyId = async (strategyId) => {
+        try {
+            const res = await makeRequest(endpoint , 'GET' , {} , {} , {} , 0 , strategyId , 'strategy');
+            if(res.data)
+            {
+                strategyJoiners.value = res.data;
+            }
+        } catch (error) {
+            console.log('error in my joiner store' , error);
+        }
+    }
+
+    const getJoinerByUserId = async (userId) => {
+        try {
+            const res = await makeRequest(endpoint , 'GET' , {} , {} , {} , 0 , userId , 'users');
+            if(res.data)
+            {
+                userJoiners.value = res.data;
+            }
+        } catch (error) {
+            console.log('error in my joiner store' , error);
+        }
+    }
+
     getJoiners();
     return {
         joiners,
@@ -63,6 +90,10 @@ export const useJoinerStore = defineStore('joiners' , () => {
         addJoinerToStrategy,
         selectedStrategy,
         editJoinerQuantity,
+        getJoinersByStrategyId,
+        getJoinerByUserId,
+        userJoiners,
+        strategyJoiners,
         editJoiner,
         deleteSelectedJoiners
     }

@@ -138,6 +138,7 @@
       @close="closeOptionModal" />
     <Position :isOpen="optionChoice === 'positions'" :strategyId="selectedStrategyId" @close="closeOptionModal" />
     <Orders :isOpen="optionChoice === 'orders'" :strategyId="selectedStrategyId" @close="closeOptionModal" />
+    <Joiner :isOpen="optionChoice === 'joiners'" :strategyId="selectedStrategyId" @close="closeOptionModal" />
   </main>
 
 </template>
@@ -154,6 +155,7 @@ import ManualOrders from './ManualOrders.vue';
 import ManualPosition from './ManualPosition.vue';
 import Position from './Position.vue';
 import Orders from './Orders.vue';
+import Joiner from './Joiner.vue';
 
 const isDeleteModalOpen = ref(false);
 const isAddEditModalOpen = ref(false);

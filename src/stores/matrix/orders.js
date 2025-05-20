@@ -150,6 +150,15 @@ export const useOrderStore = defineStore('orders', () => {
     return groupedOrders;
   }
 
+  const deleteOrder = async (orderId) => {
+    try {
+      const res = await makeRequest(endpoint, 'DELETE', {}, {}, {}, 0, orderId);
+      
+    } catch (error) {
+      console.log(error, 'Error in  order store.')
+    }
+  }
+
   const getOrderByuserId = async (userId) => {
     try {
       const res = await makeRequest(endpoint, 'GET', {}, {}, {}, 0, userId, 'users');
@@ -185,6 +194,7 @@ export const useOrderStore = defineStore('orders', () => {
   return {
     getOrders,
     getOrderByuserId,
+    deleteOrder,
     userOrders,
     orders,
     getOrderByStrategyId,

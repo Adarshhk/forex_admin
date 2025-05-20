@@ -143,7 +143,7 @@
     <ManualOrders :isOpen="optionChoice === 'manual_orders'" :userId="selectedUserId" @close="closeOptionModal" />
     <Orders :isOpen="optionChoice === 'orders'" :userId="selectedUserId" @close="closeOptionModal" />
     <Subscription :isOpen="optionChoice === 'subscriptions'" :userId="selectedUserId" @close="closeOptionModal" />
-    <!-- <Joiner :isOpen="optionChoice === 'joiners'" :userId="selectedUserId" @close="closeOptionModal" /> -->
+    <Joiner :isOpen="optionChoice === 'joiners'" :userId="selectedUserId" @close="closeOptionModal" />
   </main>
 </template>
 

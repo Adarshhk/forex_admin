@@ -1,6 +1,6 @@
 <template>
     <Modal @close="handleClose" :modelValue="props.isOpen">
-        <div class="w-[80dvw]">
+        <div class=" w-full lg:w-[80dvw] ">
             <!-- header with filters -->
             <div class="flex items-center justify-between p-4 border-b border-white/15">
                 <div class="flex items-center gap-4">

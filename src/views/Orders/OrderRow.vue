@@ -48,14 +48,14 @@
       </div>
 
       <div v-if="order.status == 'pending' && order.strategy_name == null" class="flex gap-2">
-        <button
+        <button @click="showDeleteModal = true"
           class=" border border-[#D94a4a] rounded-full p-1 hover:bg-[#D94a4a]/10 transition-all duration-150 bg-white/10 text-[#D94a4a] flex items-center">
           <img src="/public/svg/close.svg" class="w-4" alt="">
         </button>
-        <button
+        <!-- <button 
           class=" border border-custom-blue hover:bg-custom-blue/10 transition-all duration-150 rounded-full p-1 bg-white/10 flex items-center">
           <img src="/public/svg/edit.svg" class="w-4" alt="">
-        </button>
+        </button> -->
       </div>
     </div>
 
@@ -65,10 +65,12 @@
 
 <script setup>
 import DeleteModal from '@/components/DeleteModal.vue';
+import { useOrderStore } from '@/stores/matrix/orders';
 import { useTickerStore } from '@/stores/matrix/ticker/ticker';
 import { computed, ref } from 'vue';
 
 const showDeleteModal = ref(false);
+const orderStore = useOrderStore();
 const tickerStore = useTickerStore();
 
 const props = defineProps({
@@ -79,7 +81,7 @@ const props = defineProps({
 
 
 const handleOrderDelete = async () => {
-
+  await orderStore.deleteOrder(props.order.id)
 }
 
 const pnl = computed(() => {

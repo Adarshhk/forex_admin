@@ -4,7 +4,7 @@ import { ref } from "vue"
 
 export const useManualPositionStore = defineStore('manual_position', () => {
 
-    const endpoint = 'manualPosition';
+    const endpoint = 'manualPositions';
     const manualPositions = ref([]);
     const brokerFilterValues = ref([]);
     const userPositions = ref([]);
