@@ -49,12 +49,12 @@
                     Already Subscribed</p>
                 </button>
 
-                <button 
+                <RouterLink to="/positions"
                 class="flex items-center justify-center bg-gradient-to-b from-[#00C6FF] to-[#0072FF] rounded-lg w-full">
                 <p
                     class="bg-[#0B212C] hover:bg-[#0B212C]/30 w-full text-center m-[1px] p-1.5 rounded-lg transition-all duration-300 text-sm">
                     View Positions</p>
-            </button>
+            </RouterLink>
             </div>
             <router-link to="/strategy-details"
                 class="flex items-center justify-center rounded-lg w-full">

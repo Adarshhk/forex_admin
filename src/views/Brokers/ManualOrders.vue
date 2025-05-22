@@ -8,7 +8,7 @@
                     <!-- Toggle is moved to parent component -->
                     <div class="flex items-center justify-between ">
                         <div class="flex items-center gap-4">
-                            <h1 class="font-bold text-lg">Strategy Manual Orders</h1>
+                            <h1 class="font-bold text-lg">Broker Manual Orders</h1>
                         </div>
                     </div>
                 </div>
@@ -16,12 +16,12 @@
             </div>
 
             <!-- order list -->
-            <OrderRow v-if="strategyManualOrders.length" :order="order" v-for="order in strategyManualOrders" :key="order.id" />
+            <OrderRow v-if="brokerOrders.length" :order="order" v-for="order in brokerOrders" :key="order.id" />
             <EmptyState v-else />
 
             <!-- mobile view -->
             <div class="md:hidden border-t border-white/15">
-                <div v-if="strategyManualOrders.length" v-for="item in strategyManualOrders" :key="item.id"
+                <div v-if="brokerOrders.length" v-for="item in brokerOrders" :key="item.id"
                     class="flex justify-between text-sm w-full px-4 py-2 border-b border-white/20">
                     <div>
                         <div class="flex space-x-1 mb-1.5 ">
@@ -55,7 +55,9 @@
 
                         <div class="flex space-x-1 mb-1.5 ">
                             <div class="flex items-center justify-center rounded-md px-4 py-1"
-                                :class="statusClass((item.status.toUpperCase()))">
+                                :class="
+                                
+                                ((item.status.toUpperCase()))">
                                 {{ item.status }}
                             </div>
                         </div>
@@ -80,23 +82,25 @@ import Modal from '@/components/Modal.vue';
 
 // Get manual order data from store
 const manualOrderStore = useManualOrderStore();
-const { strategyManualOrders } = storeToRefs(manualOrderStore);
+const { brokerOrders } = storeToRefs(manualOrderStore);
 
 const emit = defineEmits(['close']);
 
 const props = defineProps({
-    strategyId: String,
+    brokerId: String,
     isOpen: Boolean
 })
 
 watchEffect(async () => {
-    if (props.strategyId && props.isOpen) {
-        await manualOrderStore.getOrderByStrategyId(props.strategyId);
+    if (props.brokerId && props.isOpen) {
+        await manualOrderStore.getOrderByBrokerId(props.brokerId);
     }
 })
 
 const handleClose = () => {
-    strategyManualOrders.value = []
+    brokerOrders.value = []
     emit("close");
 }
+
+
 </script>

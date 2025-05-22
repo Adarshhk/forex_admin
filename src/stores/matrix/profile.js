@@ -35,12 +35,12 @@ export const useProfileStore = defineStore('profiles', () => {
             
         if (response.data){
           profile.value = response.data;
-          setRole(profile.value.profile.role_name);
-          if(profile.value.profile.profile_picture_url == "" || profile.value.profile.profile_picture_url == "images/user/defaultuser.png" || profile.value.profile.profile_picture_url == "imagesuser/user/defaultuser.png"){
-            // profile.value.profile_picture_url= "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-            profile.value.profile.profile_picture_url= "/imgs/defaultImg.png"
+          setRole(profile.value.role);
+          if(profile.value.profile_picture_url == "" || profile.value.profile_picture_url == "images/user/defaultuser.png" || profile.value.profile_picture_url == "imagesuser/user/defaultuser.png"){
+            // profile.value_picture_url= "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+            profile.value.profile_picture_url= "/imgs/defaultImg.png"
           }
-          tickerStore.startWebSocket(profile.value.profile.user_id)
+          tickerStore.startWebSocket(profile.value.id)
         }else{
           profile.value = {};
         }

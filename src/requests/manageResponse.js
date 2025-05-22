@@ -26,6 +26,7 @@ import { useToastStore } from "@/stores/utils/toast";
 import { useWatchlistStore } from '@/stores/matrix/watchlist.js';
 import { useJoinerStore } from '@/stores/matrix/joiners.js';
 import { useWatchlistJoinerStore } from '@/stores/matrix/watchlistjoiner.js';
+import { useUserStore } from '@/stores/matrix/users.js';
 
 const statusMessages = {
   200: 'Success: ',
@@ -55,7 +56,8 @@ const getMethods = ref({
   subscription: 'getSubscriptionInfo',
   watchlist : 'getWatchlists',
   watchlistJoiners : 'getWatchlistJoiners',
-  joiners : 'getJoiners'
+  joiners : 'getJoiners',
+  users : 'getUsers'
 });
 
 function showToast(toastTitle, message, toastType, duration=3000) {
@@ -82,7 +84,8 @@ setTimeout(() => {
     subscription: useSubscriptionStore,
     watchlist : useWatchlistStore,
     watchlistJoiners : useWatchlistJoinerStore,
-    joiners : useJoinerStore
+    joiners : useJoinerStore,
+    users : useUserStore,
   };
 }, 100);
 

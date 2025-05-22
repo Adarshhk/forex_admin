@@ -8,64 +8,23 @@
                     <!-- Toggle is moved to parent component -->
                     <div class="flex items-center justify-between ">
                         <div class="flex items-center gap-4">
-                            <h1 class="font-bold text-lg">Strategy Orders</h1>
+                            <h1 class="font-bold text-lg">Broker Orders</h1>
                         </div>
                     </div>
                 </div>
 
             </div>
-
             <!-- order list -->
-            <OrderRow v-if="strategyOrders.length" :order="order" v-for="order in strategyOrders" :key="order.id" />
-            <EmptyState v-else />
+            <div>
+                <div
+                    class="table-container min-h-[50vh] rounded-t-xl xl:max-h-[calc(100vh-180px)] xl:pb-24 overflow-y-auto w-full">
+                    <OrderRow v-if="brokerOrders.length" :order="order" v-for="order in brokerOrders" :key="order.id" />
+                    <EmptyState v-else />
+                </div>
+            </div>
 
             <!-- mobile view -->
-            <div class="md:hidden border-t border-white/15">
-                <div v-if="strategyOrders.length" v-for="item in strategyOrders" :key="item.id"
-                    class="flex justify-between text-sm w-full px-4 py-2 border-b border-white/20">
-                    <div>
-                        <div class="flex space-x-1 mb-1.5 ">
-                            <h1 class="text-white/50">Name: </h1>
-                            <p class="text-white/90">{{ item.name }}</p>
-                        </div>
-                        <div class="flex space-x-1 mb-1.5 ">
-                            <h1 class="text-white/50">Broker Id: </h1>
-                            <p class="text-white/90">{{ item.broker_id }}</p>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="flex justify-end space-x-1 mb-1.5">
-                            <div v-if="item.side === 'BUY'"
-                                class="capitalize bg-[#4BCE9738] border-t text-custom-green border-custom-green rounded-full w-7 h-7 flex items-center justify-center">
-                                B</div>
-                            <div v-else-if="item.side === 'SELL'"
-                                class="capitalize bg-[#F22B5B38] border-t text-custom-red border-custom-red rounded-full w-7 h-7 flex items-center justify-center">
-                                S</div>
-                        </div>
-
-                        <div class="flex space-x-1 mb-1.5 ">
-                            <h1 class="text-white/50">Price: </h1>
-                            <p class="text-white/90">{{ item.price }}</p>
-                        </div>
-
-                        <div class="flex space-x-1 mb-1.5 ">
-                            <h1 class="text-white/50">Quantity: </h1>
-                            <p class="text-white/90">{{ item.quantity }}</p>
-                        </div>
-
-                        <div class="flex space-x-1 mb-1.5 ">
-                            <div class="flex items-center justify-center rounded-md px-4 py-1"
-                                :class="statusClass((item.status.toUpperCase()))">
-                                {{ item.status }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div v-else>
-                    No Data Found
-                </div>
-            </div>
+            <!--  -->
         </div>
     </Modal>
 </template>
@@ -79,23 +38,34 @@ import Modal from '@/components/Modal.vue';
 import { useOrderStore } from '@/stores/matrix/orders';
 
 const orderStore = useOrderStore();
-const { strategyOrders } = storeToRefs(orderStore);
+const { brokerOrders } = storeToRefs(orderStore);
 
 const emit = defineEmits(['close']);
 
 const props = defineProps({
-    strategyId: String,
-    isOpen : Boolean
+    brokerId: String,
+    isOpen: Boolean
 })
 
 watchEffect(async () => {
-    if (props.strategyId  && props.isOpen) {
-        await orderStore.getOrderByStrategyId(props.strategyId);
+    if (props.brokerId && props.isOpen) {
+        await orderStore.getOrderByBrokerId(props.brokerId);
     }
 })
 
 const handleClose = () => {
-    strategyOrders.value = []
+    brokerOrders.value = []
     emit("close");
 }
+const statusClass = (status) => {
+    if (status === "SUCCESS") {
+        return "bg-custom-green/10 text-custom-green";
+    } else if (status === "PENDING") {
+        return "bg-custom-yellow/10 text-custom-yellow";
+    } else if (status === "REJECTED") {
+        return "bg-custom-red/10 text-custom-red";
+    } else {
+        return "bg-custom-demo/10 text-custom-demo";
+    }
+};
 </script>

@@ -13,7 +13,7 @@
                 </div>
 
             </div>
-            <div class="table-container  min-h-[50vh]">
+            <div class="table-container overflow-auto h-[50vh]">
                 <table class="w-full whitespace-nowrap overflow-x-auto">
                     <thead class="border">
                         <tr class="text-left w-full px-4 py-3 text-sm">
@@ -83,7 +83,7 @@ import AddBroker from '@/components/AddBroker.vue';
 import DeleteModal from '@/components/DeleteModal.vue';
 
 const brokerStore = useBrokerIndexStore();
-const { userBrokers } = storeToRefs(brokerStore);
+const { userBrokers , editBrokerData , idForDelete} = storeToRefs(brokerStore);
 
 const isDeleteModalOpen = ref(false);
 const isEditModalOpen = ref(false);
@@ -91,7 +91,7 @@ const isEditModalOpen = ref(false);
 const emit = defineEmits(['close']);
 
 const props = defineProps({
-    userId: String,
+    userId: Number,
     isOpen: Boolean
 })
 

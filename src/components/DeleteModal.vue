@@ -1,5 +1,5 @@
 <template>
-    <div v-if="modelValue" class="fixed inset-0 bg-black/80 flex items-center lg:items-start justify-center z-[60]">
+    <div v-if="modelValue" class="fixed inset-0 bg-black/80 flex items-center lg:items-start justify-center z-[100]">
       <Transition name="fade" mode="out-in" appear>
         <div
           class="flex items-center flex-col w-[80%] sm:w-[300px] bg-[#1d1b20] z-[60] border border-white/10  rounded-lg shadow-lg relative p-4  lg:mt-[100px]"

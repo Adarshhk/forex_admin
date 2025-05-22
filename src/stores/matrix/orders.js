@@ -32,6 +32,7 @@ export const useOrderStore = defineStore('orders', () => {
   const brokerFilterValues = ref([]);
   const userOrders = ref([]);
   const strategyOrders = ref([]);
+  const brokerOrders = ref([]);
 
   const previousOrders = ref(0);
   const todayOrders = ref(0);
@@ -78,9 +79,9 @@ export const useOrderStore = defineStore('orders', () => {
 
       let tokensList = [];
       for (let i = 0; i < orders.value.length; i++) {
-        tokensList.push(orders.value[i].instrument_token);
+        tokensList.push(orders.value[i].symbol);
       }
-      //tickerStore.updateTickerList(tokensList);
+      tickerStore.updateTickerList(tokensList);
 
     } catch (error) {
       orders.value = []
@@ -180,6 +181,17 @@ export const useOrderStore = defineStore('orders', () => {
       console.log(error, 'Error in  order store.')
     }
   }
+    const getOrderByBrokerId = async (brokerId) => {
+      
+    try {
+      const res = await makeRequest(endpoint, 'GET', {}, {}, {}, 0, brokerId, 'broker');
+      if (res.data) {
+        brokerOrders.value = res.data;
+      }
+    } catch (error) {
+      console.log(error, 'Error in  order store.')
+    }
+  }
 
   function filterOrders(query) {
     if (!query) {
@@ -195,6 +207,8 @@ export const useOrderStore = defineStore('orders', () => {
     getOrders,
     getOrderByuserId,
     deleteOrder,
+    getOrderByBrokerId,
+    brokerOrders,
     userOrders,
     orders,
     getOrderByStrategyId,

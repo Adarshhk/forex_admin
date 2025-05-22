@@ -5,7 +5,7 @@
             <!-- header -->
 
             <div class="flex items-center justify-between p-4 border-b border-white/15">
-                <h1 class="md:flex items-center font-bold text-lg">Strategy Users</h1>
+                <h1 class="md:flex items-center font-bold text-lg">Strategy Subscriptions</h1>
 
             </div>
 
@@ -16,19 +16,19 @@
                         <thead class="border sticky top-0 bg-black z-10">
                             <tr class="text-left w-full text-sm">
                                 <th class="w-32">S.NO</th>
+                                <th>Strategy Name</th>
                                 <th>Name</th>
                                 <th>Email</th>
-                                <th>Mobile</th>
                                 <th>Disable</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-if="strategyUsers.length" v-for="(item, i) in strategyUsers"
+                            <tr v-if="strategySubscriptions.length" v-for="(item, i) in strategySubscriptions"
                                 class="relative text-center text-sm w-full ">
                                 <td>{{ i + 1 }}</td>
-                                <td class="text-left">{{ item.name }}</td>
+                                <td class="text-left">{{ item.strategy_name }}</td>
+                                <td class="text-left">{{ item.username }}</td>
                                 <td class="text-left">{{ item.email }}</td>
-                                <td class="text-left">{{ item.phone }}</td>
 
                                 <td>
                                     <div class="flex items-center">
@@ -57,10 +57,10 @@ import { storeToRefs } from 'pinia';
 import EmptyState from '@/components/EmptyState.vue';
 import { onMounted, watchEffect } from 'vue';
 import Modal from '@/components/Modal.vue';
-import { useUserStore } from '@/stores/matrix/users';
+import { useSubscriptionStore } from '@/stores/matrix/subscription';
 
-const userStore = useUserStore();
-const { strategyUsers } = storeToRefs(userStore);
+const subscriptionStore = useSubscriptionStore();
+const { strategySubscriptions } = storeToRefs(subscriptionStore);
 
 const emit = defineEmits(['close']);
 
@@ -71,12 +71,12 @@ const props = defineProps({
 
 watchEffect(async () => {
     if (props.strategyId && props.isOpen) {
-        await userStore.getUserByStrategyId(props.strategyId);
+        await subscriptionStore.getSubscriptionByStrategyId(props.strategyId);
     }
 })
 
 const handleClose = () => {
-    strategyUsers.value = []
+    strategySubscriptions.value = []
     emit("close");
 }
 </script>

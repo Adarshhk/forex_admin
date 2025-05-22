@@ -99,4 +99,15 @@ const handleClose = () => {
     strategyManualOrders.value = []
     emit("close");
 }
+const statusClass = (status) => {
+  if (status === "SUCCESS") {
+    return "bg-custom-green/10 text-custom-green";
+  } else if (status === "PENDING") {
+    return "bg-custom-yellow/10 text-custom-yellow";
+  } else if (status === "REJECTED") {
+    return "bg-custom-red/10 text-custom-red";
+  } else {
+    return "bg-custom-demo/10 text-custom-demo";
+  }
+};
 </script>

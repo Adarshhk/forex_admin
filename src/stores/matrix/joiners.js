@@ -9,6 +9,7 @@ export const useJoinerStore = defineStore('joiners' , () => {
     const selectedStrategy = ref({});
     const strategyJoiners = ref([]);
     const userJoiners = ref([]);
+    const idForDelete = ref(null);
 
     const getJoiners = async () => {
         try {
@@ -50,9 +51,9 @@ export const useJoinerStore = defineStore('joiners' , () => {
         }
     }
 
-    const deleteSelectedJoiners = async (form) => {
+    const deleteJoiner = async () => {
         try {
-            const res = await makeRequest(endpoint , 'POST' , {joiner_id : form} , {} , {} , 0 , null , 'delete')
+            const res = await makeRequest(endpoint , 'DELETE' , {} , {} , {} , 0 , idForDelete.value)
 
         } catch (error) {
             console.log('error in my joiner store' , error);
@@ -73,7 +74,7 @@ export const useJoinerStore = defineStore('joiners' , () => {
 
     const getJoinerByUserId = async (userId) => {
         try {
-            const res = await makeRequest(endpoint , 'GET' , {} , {} , {} , 0 , userId , 'users');
+            const res = await makeRequest(endpoint , 'GET' , {} , {} , {} , 0 , userId , 'user');
             if(res.data)
             {
                 userJoiners.value = res.data;
@@ -83,7 +84,7 @@ export const useJoinerStore = defineStore('joiners' , () => {
         }
     }
 
-    getJoiners();
+    //getJoiners();
     return {
         joiners,
         getJoiners,
@@ -95,6 +96,7 @@ export const useJoinerStore = defineStore('joiners' , () => {
         userJoiners,
         strategyJoiners,
         editJoiner,
-        deleteSelectedJoiners
+        deleteJoiner,
+        idForDelete
     }
 })

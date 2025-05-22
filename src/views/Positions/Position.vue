@@ -77,6 +77,7 @@ const pnl = computed(() => {
 const handleSqoff = async () => {
   dataForSqOff.value = {position_ids : [props.position.id]};
   await positionStore.sqOffPosition()
+  showConfirmModal.value = false;
 }
 
 

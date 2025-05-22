@@ -16,8 +16,13 @@
             </div>
 
             <!-- order list -->
-            <OrderRow v-if="userOrders.length" :order="order" v-for="order in userOrders" :key="order.id" />
-            <EmptyState v-else />
+            <div>
+                <div
+                    class="table-container min-h-[50vh] rounded-t-xl xl:max-h-[calc(100vh-180px)] xl:pb-24 overflow-y-auto w-full">
+                    <OrderRow v-if="userOrders.length" :order="order" v-for="order in userOrders" :key="order.id" />
+                    <EmptyState v-else />
+                </div>
+            </div>
 
 
         </div>
@@ -38,8 +43,8 @@ const { userOrders } = storeToRefs(orderStore);
 const emit = defineEmits(['close']);
 
 const props = defineProps({
-    userId: String,
-    isOpen : Boolean
+    userId: Number,
+    isOpen: Boolean
 })
 
 watchEffect(async () => {

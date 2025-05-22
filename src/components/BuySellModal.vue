@@ -20,7 +20,15 @@
                 </button>
             </div>
 
+            <p class="px-4 pt-2 text-custom-white/60 text-xs">Note : Broker Must Be Connected Before Placing Order</p>
             <form class="space-y-2 w-full p-4" @submit.prevent>
+
+                 <div class="space-y-1">
+                        <label for="qty" class="text-sm text-white/40 font-bold">Symbol</label>
+                        <input v-model="formData.symbol"
+                            class="focus:outline outline-custom-blue w-full mt-2 py-2 px-3 rounded-md bg-white/0 border border-white/15 hover:border-custom-blue placeholder:text-sm focus:ring-1 focus:ring-custom-blue"
+                            type="text" placeholder="Enter Symbol" />
+                    </div>
 
                 <div class="border border-white/10 rounded-lg flex gap-1 w-full">
                     <button @click.stop="(e) => { e.preventDefault(); orderCategory = 'strategy' }"
@@ -56,7 +64,10 @@
                                     class="flex gap-2 items-center px-3 py-2 border-b border-white/10 hover:bg-white/10">
                                     <Checkbox :id="item.id" :modelValue="selectedItems.includes(item.id)"
                                         @update:model-value="(bool) => handleSelection(item.id, bool)" />
-                                    <label :for="item.id" class="flex-1 cursor-pointer text-xs">{{ item.name }} &nbsp;<span class="px-2 py-1 bg-white/10 rounded-lg" v-if="orderCategory == 'strategy'">{{ joiners.filter(j => j.strategy_id == item.id).length }} Joiners</span></label>
+                                    <label :for="item.id" class="flex-1 cursor-pointer text-xs">{{ item.name }}
+                                        &nbsp;<span class="px-2 py-1 bg-white/10 rounded-lg"
+                                            v-if="orderCategory == 'strategy'">{{joiners.filter(j => j.strategy_id ==
+                                                item.id).length}} Joiners</span></label>
                                 </div>
                             </div>
                             <div v-else class="px-3 py-2 text-white/60 text-sm">
@@ -89,15 +100,15 @@
 
                 <div class="w-full " v-if="selectedItems.length > 0">
                     <div class="flex gap-2 border-b border-white/15">
-                        <button type="button" @click.stop="() => { formData.trade_type = 'market' }"
+                        <button type="button" @click.stop="() => { formData.order_type = 'market' }"
                             class=" transition-all duration-200 p-2 text-sm"
-                            :class="{ 'border-b-2 border-custom-blue text-custom-blue': formData.trade_type == 'market', 'border-b-2 border-white/0': formData.trade_type != 'market' }">
+                            :class="{ 'border-b-2 border-custom-blue text-custom-blue': formData.order_type == 'market', 'border-b-2 border-white/0': formData.order_type != 'market' }">
                             Market
                         </button>
 
-                        <button type="button" @click.stop="() => { formData.trade_type = 'limit' }"
+                        <button type="button" @click.stop="() => { formData.order_type = 'limit' }"
                             class="p-2  transition-all duration-200 text-sm flex gap-1 items-center justify-center"
-                            :class="{ 'border-b-2 border-custom-blue text-custom-blue ': formData.trade_type == 'limit', 'border-b-2 border-white/0': formData.trade_type != 'limit' }">
+                            :class="{ 'border-b-2 border-custom-blue text-custom-blue ': formData.order_type == 'limit', 'border-b-2 border-white/0': formData.order_type != 'limit' }">
                             <p>Limit</p>
                         </button>
 
@@ -105,8 +116,8 @@
                 </div>
                 <div class="grid grid-cols-2 gap-4" v-if="selectedItems.length > 0">
                     <div class="space-y-1">
-                        <label for="qty" class="text-sm text-white/40 font-bold">Qty</label>
-                        <input
+                        <label for="qty" class="text-sm text-white/40 font-bold">Volume</label>
+                        <input v-model="formData.volume"
                             class="focus:outline outline-custom-blue w-full mt-2 py-2 px-3 rounded-md bg-white/0 border border-white/15 hover:border-custom-blue placeholder:text-sm focus:ring-1 focus:ring-custom-blue"
                             type="number" placeholder="Enter Quantity" />
                     </div>
@@ -116,13 +127,13 @@
                         <label for="limit_price" class="text-sm text-white/40 font-bold">Limit Price</label>
                         <div class="relative">
                             <!-- Lock Icon -->
-                            <img v-if="formData.trade_type === 'market'" src="/src/assets/svg/lock.svg"
+                            <img v-if="formData.order_type === 'market'" src="/src/assets/svg/lock.svg"
                                 class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 opacity-70"
                                 alt="Locked" />
 
-                            <input v-model="formData.limit" :disabled="formData.trade_type === 'market'"
+                            <input v-model="formData.limit_price" :disabled="formData.order_type === 'market'"
                                 class="focus:outline outline-custom-blue w-full py-2 px-3 rounded-md bg-white/0 border border-white/15 hover:border-custom-blue placeholder:text-sm focus:ring-1 focus:ring-custom-blue disabled:opacity-50 disabled:cursor-not-allowed"
-                                :class="{ 'placeholder:opacity-0': formData.trade_type == 'market' }" type="number"
+                                :class="{ 'placeholder:opacity-0': formData.order_type == 'market' }" type="number"
                                 placeholder="Enter Limit Price" />
                         </div>
                     </div>
@@ -181,16 +192,19 @@ import { onClickOutside } from '@vueuse/core';
 import Checkbox from './Checkbox.vue';
 import { useBrokerIndexStore } from '@/stores/matrix/brokers';
 import { useJoinerStore } from '@/stores/matrix/joiners';
+import { usePositionsStore } from '@/stores/matrix/positions';
 import { useStrategiesStore } from '@/stores/matrix/strategies';
 
 const orderStore = useOrderStore();
-const strategyStore = useStrategiesStore();
+const strategiesStore = useStrategiesStore();
 const brokerStore = useBrokerIndexStore();
 const joinerStore = useJoinerStore();
 const tickerStore = useTickerStore();
+const positionStore = usePositionsStore();
 
+
+const { strategies } = storeToRefs(strategiesStore);
 const { joiners } = storeToRefs(joinerStore)
-const { strategies } = storeToRefs(strategyStore);
 const { brokers } = storeToRefs(brokerStore);
 const { showTradeModal, tradeMode, scriptToTrade } = storeToRefs(orderStore);
 
@@ -263,29 +277,57 @@ const closeModal = () => {
 }
 
 const formData = ref({
-    side: '',
-    qty: '',
-    trade_type: 'limit',
-    limit: '',
+    volume: '',
+    order_type: 'limit',
+    limit_price: '',
+    symbol: '',
     target: '',
     stoploss: '',
-    price: '',
+    signal_type: tradeMode.value,
+    broker_ids: [],
+    strategy_ids: []
+
 })
 
-watch(() => formData.value.trade_type, (newVal) => {
+watch(() => formData.value.order_type, (newVal) => {
     if (newVal === 'market') {
-        formData.value.limit = '';
+        formData.value.limit_price = '';
     }
 });
 
 const handleSubmit = () => {
-    const payload = {
-        ...formData.value,
-        selectedIds: selectedItems.value,
-        orderType: orderCategory.value
-    };
-    console.log('Submitting order:', payload);
-    // Here you would handle the submission logic
+    // Reset arrays before populating them
+    formData.value.broker_ids = [];
+    formData.value.strategy_ids = [];
+
+    // Set the appropriate IDs based on the orderCategory
+    if (orderCategory.value === 'strategy') {
+        formData.value.strategy_ids = [...selectedItems.value];
+    } else {
+        formData.value.broker_ids = [...selectedItems.value];
+    }
+
+    // Make sure symbol and signal_type are current
+    formData.value.signal_type = tradeMode.value;
+
+    orderStore.placeOrder(formData.value)
+        .then(() => {
+            // Reset form data after successful order placement
+            formData.value.volume = '';
+            formData.value.limit_price = '';
+            formData.value.target = '';
+            formData.value.stoploss = '';
+            formData.value.order_type = 'limit';
+            formData.value.broker_ids = [];
+            formData.value.strategy_ids = [];
+            closeModal();
+            positionStore.getPositions()
+        })
+        .catch((error) => {
+            console.error('Error placing order:', error);
+        });
+
+    
 }
 
 // Apply onClickOutside only to the search dropdown, not the entire modal

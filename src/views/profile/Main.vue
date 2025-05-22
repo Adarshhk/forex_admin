@@ -9,7 +9,7 @@
         </div>
         <div class="absolute top-0 w-full h-full flex flex-col items-center justify-center space-y-3 pt-6">
             <div class="relative">
-                <img :src="profile?.profile?.profile_pic_url || '/imgs/dafaultImg2.png'" alt="Profile" class="w-[130px] h-[130px] rounded-lg object-cover" />
+                <img :src="profile?.profile_pic_url || '/imgs/dafaultImg2.png'" alt="Profile" class="w-[130px] h-[130px] rounded-lg object-cover" />
                 <button @click="triggerFileInput" type="button">
                     <img src="/svg/edit.svg" alt="Edit" class="absolute bottom-0 -right-2 w-6 cursor-pointer" />
                 </button>
@@ -22,8 +22,8 @@
                 />
             </div>
             <div class="space-y-1 ml-2">
-                <h1 class="font-bold text-lg">{{ profile?.profile?.name }}</h1>
-                <p class="text-xs text-white/80">{{ profile?.profile?.email }}</p>
+                <h1 class="font-bold text-lg">{{ profile?.name }}</h1>
+                <p class="text-xs text-white/80">{{ profile?.email }}</p>
             </div>
         </div>
     </div>
@@ -39,7 +39,7 @@
                 </div>
                 <div class="absolute top-0 w-full h-full flex flex-col items-center justify-center space-y-3 pt-6">
                     <div class="relative">
-                        <img :src="profile?.profile?.profile_pic_url || '/imgs/dafaultImg2.png'" alt="Profile"
+                        <img :src="profile?.profile_pic_url || '/imgs/dafaultImg2.png'" alt="Profile"
                             class="w-[130px] h-[130px] rounded-lg object-cover" />
                         <button @click="triggerFileInput" type="button">
                             <img src="/svg/edit.svg" alt="Edit" class="absolute bottom-0 -right-2 w-6 cursor-pointer" />
@@ -53,8 +53,8 @@
                         />
                     </div>
                     <div class="space-y-1 ml-2">
-                        <h1 class="font-bold text-lg">{{ profile?.profile?.name }}</h1>
-                        <p class="text-xs text-white/80">{{ profile?.profile?.email }}</p>
+                        <h1 class="font-bold text-lg">{{ profile?.name }}</h1>
+                        <p class="text-xs text-white/80">{{ profile?.email }}</p>
                     </div>
                 </div>
             </div>
@@ -98,10 +98,10 @@
 
             <div class="border border-white/15 grid grid-cols-2 md:grid-cols-3 items-center mt-4 rounded-lg p-2">
                 <div class="flex item-center">
-                    <img :src="profile?.profile?.profile_pic_url || '/imgs/defaultImg.png'" alt="Profile" class="w-[40px] h-[40px] object-cover rounded-full" />
+                    <img :src="profile?.profile_pic_url || '/imgs/defaultImg.png'" alt="Profile" class="w-[40px] h-[40px] object-cover rounded-full" />
                     <div class="space-y-1 ml-2">
-                        <h1 class="font-bold text-sm xs:text-base">{{ profile?.profile?.name }}</h1>
-                        <p class="text-xs text-white/80">{{ profile?.profile?.email }}</p>
+                        <h1 class="font-bold text-sm xs:text-base">{{ profile?.name }}</h1>
+                        <p class="text-xs text-white/80">{{ profile?.email }}</p>
                     </div>
                 </div>
 
@@ -182,6 +182,7 @@
 
             </div>
         </div>
+
     </main>
 </template>
 
@@ -211,11 +212,11 @@ const passwordForm = ref({
 })
 
 watchEffect(() => {
-    if (profile.value.socials) {
-        profileForm.value.website = profile.value.socials.website;
-        profileForm.value.name = profile.value.profile.name;
-        profileForm.value.tradingview = profile.value.socials.tradingview;
-        profileForm.value.telegram = profile.value.socials.telegram;
+    if (profile.value) {
+        profileForm.value.website = profile.value.website;
+        profileForm.value.name = profile.value.name;
+        profileForm.value.tradingview = profile.value.tradingview;
+        profileForm.value.telegram = profile.value.telegram;
     }
 })
 

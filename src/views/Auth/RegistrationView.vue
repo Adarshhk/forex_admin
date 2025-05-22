@@ -188,7 +188,7 @@ const getOtpRequest = async () => {
     errorMsg.value = "Please fill the form correctly!";
     // toastStore.addToast("Warning", "Please check the filled form!", "warn");
   } else {
-    debugger
+    
     try {
       const response = await makeRequest("getSignupOTP", "POST", registerFormData, {}, {});
 

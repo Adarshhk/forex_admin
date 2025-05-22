@@ -48,7 +48,7 @@ const tickerStore = useTickerStore();
         let tokensList=[]
         if(paperPositions.value && paperPositions.value.length){
           for(let i=0;i<paperPositions.value.length;i++){
-            tokensList.push(paperPositions.value[i].instrument_token)
+            tokensList.push(paperPositions.value[i].symbol)
           }
           tickerStore.updateTickerList(tokensList)
         }
@@ -167,14 +167,14 @@ const tickerStore = useTickerStore();
     // Other store actions and properties here...
     function updatePaperPositionLastPrice(data) {
       
-          const newTick = tickerStore.getLastPrice(data.instrument_token);
+          const newTick = tickerStore.getLastPrice(data.symbol);
           return newTick || data.last_price;  
     };
     
   // Other store actions and properties here...
   // function updatePaperPositionLastPrice (data) {
   //   paperPositions.value.forEach((position) => {
-  //     if (position.instrument_token === data.instrument_token) {
+  //     if (position.symbol === data.symbol) {
   //       position.last_price = data.last_price;
   //     }
   //   });

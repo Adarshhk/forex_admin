@@ -13,7 +13,7 @@
                 </div>
 
             </div>
-            <div class="table-container  min-h-[50vh]">
+            <div class="table-container overflow-auto h-[50vh]">
                 <table class="w-full whitespace-nowrap overflow-x-auto">
                     <thead class="border">
                         <tr class="text-left w-full px-4 py-3 text-sm">
@@ -83,7 +83,7 @@
                             type="number" placeholder="Enter Lot Size" />
                     </div>
 
-                    <button @click="handleSubmit"
+                    <button @click.prevent="handleSubmit"
                         class="min-w-[93px] w-full mt-4 text-sm px-6 py-2 rounded-md bg-custom-blue">Done</button>
                 </form>
             </div>
@@ -104,7 +104,7 @@ import DeleteModal from '@/components/DeleteModal.vue';
 import { useJoinerStore } from '@/stores/matrix/joiners';
 
 const joinerStore = useJoinerStore();
-const { userJoiners } = storeToRefs(joinerStore);
+const { userJoiners , idForDelete} = storeToRefs(joinerStore);
 
 const isDeleteModalOpen = ref(false);
 const isEditModalOpen = ref(false);
@@ -112,12 +112,13 @@ const isEditModalOpen = ref(false);
 const emit = defineEmits(['close']);
 
 const props = defineProps({
-    userId: String,
+    userId: Number,
     isOpen: Boolean
 })
 
 const formdata = ref({
-    quantity: 0
+    quantity: 0,
+    id : null
 });
 
 watchEffect(async () => {
@@ -134,16 +135,19 @@ const openDeleteModal = (id) => {
 
 const openEditModal = (joiner) => {
     formdata.value.quantity = joiner.quantity
+    formdata.value.id = joiner.id
     isEditModalOpen.value = true;
 };
 
 const closeEditModal = () => {
     formdata.value.quantity = 0;
+    formdata.value.id = null    
     isEditModalOpen.value = false;
 };
 
 const handleActiveToggle = async (joiner) => {
-    await joinerStore.editJoiner(joiner.id, { is_enabled: joiner.is_enabled });
+    console.log(joiner)
+    await joinerStore.editJoiner({ is_enabled: joiner.is_enabled } , joiner.id);
 };
 
 const handleClose = () => {
@@ -151,8 +155,14 @@ const handleClose = () => {
     emit("close");
 }
 
-const handleDeleteJoiner = async (id) => {
-    await joinerStore.deleteSelectedJoiners([id])
+const handleDeleteJoiner = async () => {
+    await joinerStore.deleteJoiner()
+    isDeleteModalOpen.value = false;
+    idForDelete.value = null
 }
 
+const handleSubmit = async () => {
+    await joinerStore.editJoinerQuantity(formdata.value);
+    closeEditModal();
+};
 </script>

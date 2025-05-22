@@ -156,11 +156,12 @@ import { computed, ref } from 'vue';
 import AddEditModal from './AddEditModal.vue';
 import Broker from './Broker.vue';
 import ManualPosition from './ManualPosition.vue';
-import Position from './Position.vue';
+import Position from './Positions.vue';
 import ManualOrders from './ManualOrders.vue';
 import Orders from './Orders.vue';
 import Subscription from './Subscription.vue';
 import Joiner from './Joiner.vue';
+import EmptyState from '@/components/EmptyState.vue';
 
 // Options menu related refs
 const activeOptionsMenu = ref(null);

@@ -111,8 +111,8 @@
                       class="text-xs px-2 py-1 bg-white/10 rounded hover:bg-white/20">Manual Orders</button>
                     <button @click="selectOption('orders', item.id)"
                       class="text-xs px-2 py-1 bg-white/10 rounded hover:bg-white/20">Orders</button>
-                    <button @click="selectOption('users', item.id)"
-                      class="text-xs px-2 py-1 bg-white/10 rounded hover:bg-white/20">Users</button>
+                    <button @click="selectOption('subscriptions', item.id)"
+                      class="text-xs px-2 py-1 bg-white/10 rounded hover:bg-white/20">Subscriptions</button>
                   </div>
                 </td>
               </tr>
@@ -131,7 +131,7 @@
     <AddEditModal :isOpen="isAddEditModalOpen" @close="isAddEditModalOpen = false" />
     <DeleteModal v-model="isDeleteModalOpen" @close="{ isDeleteModalOpen = false; idToDelete.value = null }"
       @confirm="deleteStrategy" />
-    <Users :isOpen="optionChoice === 'users'" :strategyId="selectedStrategyId" @close="closeOptionModal" />
+    <Subscriptions :isOpen="optionChoice === 'subscriptions'" :strategyId="selectedStrategyId" @close="closeOptionModal" />
     <ManualOrders :isOpen="optionChoice === 'manual_orders'" :strategyId="selectedStrategyId"
       @close="closeOptionModal" />
     <ManualPosition :isOpen="optionChoice === 'manual_position'" :strategyId="selectedStrategyId"
@@ -150,12 +150,13 @@ import { useStrategiesStore } from '@/stores/matrix/strategies';
 import { storeToRefs } from 'pinia';
 import { ref } from 'vue';
 import AddEditModal from './AddEditModal.vue';
-import Users from './Users.vue';
 import ManualOrders from './ManualOrders.vue';
 import ManualPosition from './ManualPosition.vue';
 import Position from './Position.vue';
 import Orders from './Orders.vue';
 import Joiner from './Joiner.vue';
+import Subscriptions from './Subscriptions.vue';
+import EmptyState from '@/components/EmptyState.vue';
 
 const isDeleteModalOpen = ref(false);
 const isAddEditModalOpen = ref(false);

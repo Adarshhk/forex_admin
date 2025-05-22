@@ -40,7 +40,7 @@ const { userManualOrders } = storeToRefs(manualOrderStore);
 const emit = defineEmits(['close']);
 
 const props = defineProps({
-    userId: String,
+    userId: Number,
     isOpen: Boolean
 })
 

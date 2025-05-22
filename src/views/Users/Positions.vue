@@ -36,8 +36,8 @@ import { storeToRefs } from 'pinia';
 import EmptyState from '@/components/EmptyState.vue';
 import { onMounted, watchEffect } from 'vue';
 import Modal from '@/components/Modal.vue';
-import Position from './Position.vue';
 import { usePositionsStore } from '@/stores/matrix/positions';
+import Position from '../Positions/Position.vue';
 
 const positionStore = usePositionsStore();
 const { userPositions } = storeToRefs(positionStore);
@@ -45,7 +45,7 @@ const { userPositions } = storeToRefs(positionStore);
 const emit = defineEmits(['close']);
 
 const props = defineProps({
-    userId: String,
+    userId: Number,
     isOpen: Boolean
 })
 

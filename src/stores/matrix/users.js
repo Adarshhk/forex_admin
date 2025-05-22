@@ -59,7 +59,7 @@ export const useUserStore = defineStore('users', () => {
 
     const getUserByStrategyId = async(strategyId) => {
         try {
-            const res = await makeRequest(endpoint , 'GET' , {} , {} , {} , 0 , strategyId , 'strategy');
+            const res = await makeRequest(endpoint , 'GET' , {} , {} , {} , 0 , strategyId , 'strategy-subscriptions');
             if(res.data)
             {
                 strategyUsers.value = res.data;

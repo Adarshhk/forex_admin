@@ -1,6 +1,7 @@
 import { makeRequest } from "@/requests/requests";
 import { defineStore } from "pinia"
 import { ref } from "vue"
+import { useTickerStore } from "./ticker/ticker";
 
 export const useManualPositionStore = defineStore('manual_position', () => {
 
@@ -9,6 +10,8 @@ export const useManualPositionStore = defineStore('manual_position', () => {
     const brokerFilterValues = ref([]);
     const userPositions = ref([]);
     const strategyPositions = ref([]);
+    const brokerPositions = ref([]);
+    const tickerStore = useTickerStore();
 
     const getManualPosition = async () => {
 
@@ -18,6 +21,11 @@ export const useManualPositionStore = defineStore('manual_position', () => {
             if (res.data) {
                 manualPositions.value = res.data;
                 brokerFilterValues.value = getUniqueBrokers(manualPositions.value);
+                let tokensList = [];
+                for (let i = 0; i < manualPositions.value.length; i++) {
+                    tokensList.push(manualPositions.value[i].symbol);
+                }
+                tickerStore.updateTickerList(tokensList);
             }
         } catch (error) {
             console.log(error, 'Error in manual order store.')
@@ -43,7 +51,7 @@ export const useManualPositionStore = defineStore('manual_position', () => {
 
     const getPositionByUserId = async (userId) => {
         try {
-            const res = await makeRequest(endpoint, 'GET', {}, {}, {} , 0 , userId, 'users');
+            const res = await makeRequest(endpoint, 'GET', {}, {}, {}, 0, userId, 'users');
             if (res.data) {
                 userPositions.value = res.data;
             }
@@ -52,7 +60,7 @@ export const useManualPositionStore = defineStore('manual_position', () => {
         }
     }
 
-     const getPositionByStrategyId = async (strategyId) => {
+    const getPositionByStrategyId = async (strategyId) => {
         try {
             const res = await makeRequest(endpoint, 'GET', {}, {}, {}, 0, strategyId, 'strategy');
             if (res.data) {
@@ -63,12 +71,25 @@ export const useManualPositionStore = defineStore('manual_position', () => {
         }
     }
 
+    const getPositionByBrokerId = async (brokerId) => {
+        try {
+            const res = await makeRequest(endpoint, 'GET', {}, {}, {}, 0, brokerId, 'broker');
+            if (res.data) {
+                brokerPositions.value = res.data;
+            }
+        } catch (error) {
+            console.log(error, 'Error in position store.')
+        }
+    }
+
     getManualPosition()
     return {
+        getPositionByBrokerId,
         getManualPosition,
         getPositionByUserId,
         getPositionByStrategyId,
         strategyPositions,
+        brokerPositions,
         userPositions,
         manualPositions,
         brokerFilterValues,

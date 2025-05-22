@@ -64,11 +64,12 @@
               <tr class="text-left w-full px-4 py-3 text-sm">
                 <th><div><span>S.NO</span></div></th>
                 <th>Name</th>
+                <th>User Name</th>
                 <th>Broker ID</th>
                 <th>Server</th>
                 <th>Connect</th>
                 <th>Status</th>
-                <th>Action</th>
+                <th class="w-72">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -76,6 +77,7 @@
                 class="text-left text-sm w-full px-4 py-2">
                 <td><div class="text-center"><span>{{ i + 1 }}</span></div></td>
                 <td><div>{{ item.broker_name }}</div></td>
+                <td>{{ item.username }}</td>
                 <td>{{ item.broker_userid }}</td>
                 <td>{{ item.server_name }}</td>
                 <td>
@@ -88,13 +90,21 @@
                   </div>
                 </td>
                 <td>
-                  <div class="flex items-center gap-2">
+                  <div class="flex items-center gap-2 flex-wrap">
                     <button @click="openEditModal(item)" class="flex items-center space-x-1">
                       <img src="/svg/edit.svg" alt="Edit" class="w-6 opacity-90" />
                     </button>
                     <button @click="openDeleteModal(item.id)" class="flex items-center space-x-1">
                       <img src="/svg/delete.svg" alt="joiners" class="w-4 opacity-90" />
                     </button>
+                    <button @click="selectOption('orders', item.id)"
+                      class="text-xs px-2 py-1 bg-white/10 rounded hover:bg-white/20">Orders</button>
+                      <button @click="selectOption('positions', item.id)"
+                      class="text-xs px-2 py-1 bg-white/10 rounded hover:bg-white/20">Positions</button>
+                      <button @click="selectOption('manual_orders', item.id)"
+                      class="text-xs px-2 py-1 bg-white/10 rounded hover:bg-white/20">Manual Orders</button>
+                      <button @click="selectOption('manual_positions', item.id)"
+                      class="text-xs px-2 py-1 bg-white/10 rounded hover:bg-white/20">Manual Positions</button>
                   </div>
                 </td>
               </tr>
@@ -107,6 +117,10 @@
       </div>
     </section>
 
+    <Orders :isOpen="optionChoice === 'orders'" :brokerId="selectedBrokerId" @close="closeOptionModal" />
+    <Position :isOpen="optionChoice === 'positions'" :brokerId="selectedBrokerId" @close="closeOptionModal" />
+    <ManualOrders :isOpen="optionChoice === 'manual_orders'" :brokerId="selectedBrokerId" @close="closeOptionModal" />
+    <ManualPosition :isOpen="optionChoice === 'manual_positions'" :brokerId="selectedBrokerId" @close="closeOptionModal" />
     <AddBroker :isOpen="isEditModalOpen" @close="closeEditModal" />
     <DeleteModal v-model="isDeleteModalOpen" @close="isDeleteModalOpen = false" @confirm="handleDeleteBroker" />
   </main>
@@ -120,9 +134,18 @@ import { storeToRefs } from 'pinia';
 import AddBroker from '@/components/AddBroker.vue';
 import Dropdown from '@/components/Dropdown.vue';
 import EmptyState from '@/components/EmptyState.vue';
+import Orders from './Orders.vue';
+import Position from './Position.vue';
+import ManualOrders from './ManualOrders.vue';
+import ManualPosition from './ManualPosition.vue';
 
 const brokerStore = useBrokerIndexStore();
 const { brokers, idForDelete, editBrokerData, brokerFilterValue } = storeToRefs(brokerStore);
+
+
+const activeOptionsMenu = ref(null);
+const optionChoice = ref(null);
+const selectedBrokerId = ref(null);
 
 const isStatusDropdownOpen = ref(false);
 const isBrokerDropdownOpen = ref(false);
@@ -171,5 +194,16 @@ const closeEditModal = () => {
 const handleActiveToggle = async (broker) => {
   brokerStore.addEditBroker(broker.id, { is_enabled: broker.is_enabled });
 };
+
+const selectOption = (option, userId) => {
+  optionChoice.value = option;
+  selectedBrokerId.value = userId;
+  activeOptionsMenu.value = null;
+}
+
+const closeOptionModal = () => {
+  optionChoice.value = null;
+  selectedBrokerId.value = null;
+}
 </script>
 

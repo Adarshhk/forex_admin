@@ -3,7 +3,7 @@ import { io } from 'socket.io-client';
 
 class MatrixTicker {
     constructor({ root, token, reconnect = true, max_retry = 50, max_delay = 60 }) {
-        this.root = 'https://9jlz82ql-7000.inc1.devtunnels.ms';
+        this.root = 'https://dsxt5ptw-7000.inc1.devtunnels.ms';
         this.token = token;
         this.auto_reconnect = reconnect;
         this.reconnect_max_tries = max_retry;
@@ -73,7 +73,6 @@ class MatrixTicker {
     }
     subscribe(tokens , id) {
         if (this.ws && tokens.length > 0 ) {
-            console.log(tokens)
             this.ws.emit('subscribe_symbol', { symbol : tokens , user_id : id});
         }
     }

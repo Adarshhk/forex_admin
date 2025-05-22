@@ -36,6 +36,7 @@ export const usePositionsStore = defineStore('positions', () => {
   let dataForSqOff = ref(null);
   const totalPnlClass = ref('');
   const userPositions = ref([]);
+  const brokerPositions = ref([]);  
 
   const strategyPositions = ref([]);
   // watch(strategies, () => {
@@ -75,9 +76,9 @@ export const usePositionsStore = defineStore('positions', () => {
         mainPositions.value = positions.value
         let tokensList = []
         for (let i = 0; i < positions.value.length; i++) {
-          tokensList.push(positions.value[i].instrument_token)
+          tokensList.push(positions.value[i].symbol)
         }
-        //tickerStore.updateTickerList(tokensList)
+        tickerStore.updateTickerList(tokensList)
         strategiesPositions.value = computeStrategiesPositions();
         strategyFilterValue.value = getUniqueStrategies(positions.value);
         brokerFilterValue.value = getUniqueBrokers(positions.value);
@@ -222,8 +223,8 @@ export const usePositionsStore = defineStore('positions', () => {
   // Other store actions and properties here...
   function updatePositionLastPrice(data) {
     // positions.value.forEach((position) => {
-    //   if (position.instrument_token === data.instrument_token) {
-    const newTick = tickerStore.getLastPrice(data.instrument_token);
+    //   if (position.symbol === data.symbol) {
+    const newTick = tickerStore.getLastPrice(data.symbol);
 
     return newTick || data.last_price;
     //   }
@@ -269,7 +270,7 @@ export const usePositionsStore = defineStore('positions', () => {
     try {
       const res = await makeRequest(endpoint, 'GET', {}, {}, {}, 0, brokerId, 'broker');
       if (res.data) {
-        strategyPositions.value = res.data;
+        brokerPositions.value = res.data;
       }
     } catch (error) {
       console.log(error, 'Error in position store.')
@@ -283,6 +284,8 @@ export const usePositionsStore = defineStore('positions', () => {
   return {
     getPositions,
     strategyFilterValue,
+    getPositionByBrokerId,
+    brokerPositions,
     getPositionByUserId,
     getPositionByStrategyId,
     strategyPositions,

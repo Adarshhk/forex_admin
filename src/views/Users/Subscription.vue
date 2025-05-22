@@ -16,7 +16,7 @@
             </div>
 
             <div class="">
-                <div class="table-container  min-h-[50vh]">
+                <div class="table-container overflow-auto h-[50vh]">
                     <table class="w-full whitespace-nowrap overflow-x-auto">
                         <thead class="border">
                             <tr class="text-left w-full px-4 py-3 text-sm">
@@ -86,7 +86,7 @@ const { userSubscriptions } = storeToRefs(subscriptionStore);
 const emit = defineEmits(['close']);
 
 const props = defineProps({
-    userId: String,
+    userId: Number,
     isOpen: Boolean
 })
 
@@ -104,5 +104,12 @@ const handleActiveToggle = async (subscription) => {
 const handleClose = () => {
     userSubscriptions.value = []
     emit("close");
+}
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
 }
 </script>

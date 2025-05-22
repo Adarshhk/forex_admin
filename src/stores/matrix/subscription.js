@@ -9,6 +9,7 @@ export const useSubscriptionStore = defineStore('subscription', () => {
   const editSubscriptionDate = ref(null);
   const idForDelete = ref(null);
   const userSubscriptions = ref([]);
+  const strategySubscriptions = ref([]);
 
   async function getSubscriptionInfo() {
 
@@ -69,11 +70,23 @@ export const useSubscriptionStore = defineStore('subscription', () => {
       console.log(error, 'Error in  order store.')
     }
   }
+    const getSubscriptionByStrategyId = async (userId) => {
+    try {
+      const res = await makeRequest(endpoint, 'GET', {}, {}, {}, 0, userId, 'strategy');
+      if (res.data) {
+        strategySubscriptions.value = res.data;
+      }
+    } catch (error) {
+      console.log(error, 'Error in  order store.')
+    }
+  }
 
   getSubscriptionInfo();
   return {
     getSubscriptionInfo,
     subscriptions,
+    getSubscriptionByStrategyId,
+    strategySubscriptions,
     getSubscriptionByUserId,
     userSubscriptions,
     addEditSubscriptions,
