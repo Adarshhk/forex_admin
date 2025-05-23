@@ -8,12 +8,12 @@ const ProfileLayout = () => import('@/layout/ProfileLayout.vue')
 
 // Pages
 const Orders = () => import('@/views/Orders/Main.vue')
+const Dashboard = () => import('@/views/Dashboard/Main.vue')
 const Positions = () => import('@/views/Positions/Main.vue')
 const Strategies = () => import('@/views/Strategies/Main.vue');
 const DeployedStrategies = () => import('@/views/deployedStrategies/Main.vue')
 const Brokers = () => import('@/views/Brokers/Main.vue')
 const Profile = () => import('@/views/profile/Main.vue')
-// const StrategyDetails = () => import('@/views/deployedStrategies/StrategyDetails.vue')
 const LoginView = () => import('@/views/Auth/LoginView.vue')
 const RegistrationView = () => import('@/views/Auth/RegistrationView.vue')
 const Users = () => import('@/views/Users/Main.vue')
@@ -27,11 +27,11 @@ const router = createRouter({
       name: '',
       component: LoginLayout,
       children: [
-        {
-          path:'/register',
-          name:'register',
-          component: RegistrationView
-        },
+        // {
+        //   path:'register',
+        //   name:'register',
+        //   component: RegistrationView
+        // },
         {
           path:'',
           name:'new-login',
@@ -45,7 +45,13 @@ const router = createRouter({
       component: DashboardLayout,
       children:[
         {
-          path: "",
+          path: "/",
+          name: "dashboard",
+          component: Dashboard,
+          meta: { requiresAuth: true }
+        },
+        {
+          path: "/users",
           name: "users",
           component: Users,
           meta: { requiresAuth: true }

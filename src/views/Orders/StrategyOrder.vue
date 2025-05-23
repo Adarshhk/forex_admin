@@ -95,7 +95,7 @@
         <EmptyState v-else />
 
         <!-- mobile view -->
-        <div class="md:hidden border-t border-white/15">
+        <!-- <div class="md:hidden border-t border-white/15">
             <div v-if="orders.length" v-for="item in orders" :key="item.id"
                 class="flex justify-between text-sm w-full px-4 py-2 border-b border-white/20">
                 <div>
@@ -148,7 +148,7 @@
             <div v-else>
                 No Data Found
             </div>
-        </div>
+        </div> -->
     </div>
 </template>
 

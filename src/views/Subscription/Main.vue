@@ -1,70 +1,23 @@
 <template>
     <main class="flex flex-row gap-2 w-full justify-between">
-        <!-- dynamic page -->
         <section class="w-full">
-            <!-- header -->
+            <!-- Header -->
             <div class="flex items-center justify-between p-4 border-b border-white/15">
-                <h1 class="md:flex items-center font-bold text-lg">Subscriptions</h1>
+                <h1 class="text-lg font-bold">Subscriptions</h1>
                 <button @click="isEditModalOpen = true"
-                    class="flex items-center justify-center bg-gradient-to-b nrml-text from-[#00C6FF] to-[#0072FF] rounded-lg w-fit text-nowrap">
-                    <i class="p-2 lg:pl-2 pi pi-plus"></i>
-                    <p class="pr-2 hidden lg:block pl-1 py-2 nrml-text">Add Subscription</p>
+                    class="flex items-center justify-center bg-gradient-to-b from-[#00C6FF] to-[#0072FF] rounded-lg text-nowrap">
+                    <i class="p-2 pi pi-plus lg:pl-2"></i>
+                    <p class="hidden pr-2 pl-1 py-2 lg:block">Add Subscription</p>
                 </button>
-                <!-- <div class="hidden md:flex items-center justify-end col-span-4 space-x-1"> -->
-                <!-- Status Filter -->
-                <!-- <div class="relative">
-            <button @click="isStatusDropdownOpen = !isStatusDropdownOpen"
-              class="inline-flex items-center bg-white/15 rounded-md text-sm px-2 py-1 text-nowrap">
-              Status
-              <i class="pi pi-chevron-down ml-2"></i>
-            </button>
-            <Dropdown v-model="isStatusDropdownOpen">
-              <button @click="() => { filters.status = '' ; isStatusDropdownOpen = false }"
-                :class="{ 'bg-white/10': filters.status === '' }"
-                class="block text-left px-4 py-2 text-sm text-white hover:bg-[#4e4b50] w-full rounded">All</button>
-              <button @click="() => { filters.status = true ; isStatusDropdownOpen = false }"
-                :class="{ 'bg-white/10': filters.status === true }"
-                class="block text-left px-4 py-2 text-sm text-white hover:bg-[#4e4b50] w-full rounded">Enabled</button>
-              <button @click="() => { filters.status = false ; isStatusDropdownOpen = false }"
-                :class="{ 'bg-white/10': filters.status === false }"
-                class="block text-left px-4 py-2 text-sm text-white hover:bg-[#4e4b50] w-full rounded">Disabled</button>
-            </Dropdown>
-          </div> -->
-
-                <!-- Broker Filter -->
-                <!-- <div class="relative">
-            <button @click="isBrokerDropdownOpen = !isBrokerDropdownOpen"
-              class="inline-flex items-center bg-white/15 rounded-md text-sm px-2 py-1 text-nowrap">
-              Brokers
-              <i class="pi pi-chevron-down ml-2"></i>
-            </button>
-            <Dropdown v-model="isBrokerDropdownOpen">
-              <button @click="() => { filters.broker = ''; isBrokerDropdownOpen = false }"
-                :class="{ 'bg-white/10': filters.broker === '' }"
-                class="block text-left px-4 py-2 text-sm text-white hover:bg-[#4e4b50] w-full rounded">
-                All
-              </button>
-              <button v-for="broker in brokerFilterValue" :key="broker.id"
-                @click="() => { filters.broker = broker.broker_name; isBrokerDropdownOpen = false }"
-                :class="{ 'bg-white/10': filters.broker === broker.broker_name }"
-                class="block text-left px-4 py-2 text-sm text-white hover:bg-[#4e4b50] w-full rounded">
-                {{ broker.broker_name }}
-              </button>
-            </Dropdown>
-          </div>
-        </div> -->
-
-                <!-- Filter Icon for Mobile -->
-                <!-- <button
-          class="flex md:hidden items-center justify-center small-btn-gradient2 p-1 xs:p-1.5 border border-white/10 rounded-[10px] xl:rounded-full text-nowrap">
-          <img src="/svg/filter.svg" alt="filter" class="w-6 h-6" />
-        </button> -->
             </div>
 
-            <!-- body -->
-            <div class="">
-                <div class="table-container  min-h-[50vh]">
+            <!-- Body -->
+            <div class="block">
+                <!-- Desktop Table -->
+                <div class="hidden md:block table-container min-h-[50vh]">
                     <table class="w-full whitespace-nowrap overflow-x-auto">
+                        <!-- Keep existing desktop table structure -->
+                         <table class="w-full whitespace-nowrap overflow-x-auto">
                         <thead class="border">
                             <tr class="text-left w-full px-4 py-3 text-sm">
                                 <th>
@@ -125,13 +78,78 @@
                             </tr>
                         </tbody>
                     </table>
+                    </table>
+                </div>
+
+                <!-- Mobile Cards -->
+                <div class="md:hidden">
+                    <div v-if="subscriptions.length" class="space-y-4 p-4">
+                        <div v-for="(item, i) in subscriptions" :key="item.id" 
+                            class="bg-white/5 rounded-lg p-4 border border-white/10">
+                            
+                            <!-- Card Header -->
+                            <div class="flex items-start justify-between mb-3">
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <span class="text-sm text-gray-400">#{{ i + 1 }}</span>
+                                        <h3 class="text-base font-semibold truncate">{{ item.strategy_name }}</h3>
+                                    </div>
+                                    <p class="text-sm text-gray-400 truncate">{{ item.user_name }}</p>
+                                    <p class="text-sm text-gray-400 truncate">{{ item.user_email }}</p>
+                                </div>
+                                <div class="flex items-center gap-2 ml-4">
+                                    <ButtonSwitch @change="handleActiveToggle(item)" 
+                                        :id="`mobile-${item.id}`" name="is_active" v-model="item.is_enabled" />
+                                </div>
+                            </div>
+
+                            <!-- Card Body -->
+                            <div class="grid grid-cols-2 gap-3 text-sm mt-2">
+                                <div>
+                                    <p class="text-gray-400">Payment Status:</p>
+                                    <p :class="{
+                                        'text-green-400': item.payment_status === 'paid',
+                                        'text-yellow-400': item.payment_status === 'pending',
+                                        'text-red-400': item.payment_status === 'failed'
+                                    }">
+                                        {{ item.payment_status }}
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-400">Start Date:</p>
+                                    <p>{{ formatDate(item.subscribed_at) }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-400">End Date:</p>
+                                    <p>{{ item.end_date }}</p>
+                                </div>
+                            </div>
+
+                            <!-- Actions -->
+                            <div class="flex items-center gap-2 mt-4">
+                                <button @click="openEditModal(item)" 
+                                    class="p-2 bg-white/10 rounded hover:bg-white/20">
+                                    <img src="/svg/edit.svg" alt="Edit" class="w-5 opacity-90" />
+                                </button>
+                                <button @click="openDeleteModal(item.id)" 
+                                    class="p-2 bg-white/10 rounded hover:bg-white/20">
+                                    <img src="/svg/delete.svg" alt="Delete" class="w-4 opacity-90" />
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Mobile Empty State -->
+                    <div v-else class="p-8">
+                        <EmptyState />
+                    </div>
                 </div>
             </div>
         </section>
 
+        <!-- Modals -->
         <AddEditModal :isOpen="isEditModalOpen" @close="closeEditModal" />
         <DeleteModal v-model="isDeleteModalOpen" @close="isDeleteModalOpen = false" @confirm="handleDeleteBroker" />
-
     </main>
 </template>
 
@@ -185,4 +203,15 @@ const handleActiveToggle = async (subscription) => {
 
 </script>
 
-<style scoped></style>
+
+<style scoped>
+.table-container {
+    overflow-x: auto;
+}
+
+@media (max-width: 768px) {
+    .table-container {
+        display: none;
+    }
+}
+</style>

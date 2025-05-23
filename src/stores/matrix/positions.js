@@ -4,12 +4,14 @@ import { makeRequest, state } from "@/requests/requests";
 import { useTickerStore } from './ticker/ticker'
 import { useStrategiesStore } from "@/stores/matrix/strategies";
 import { storeToRefs } from "pinia";
+import { useManualPositionStore } from './manualposition';
 
 
 
 export const usePositionsStore = defineStore('positions', () => {
   const tickerStore = useTickerStore();
   const strategiesStore = useStrategiesStore();
+  const manaulPositionsStore = useManualPositionStore();
   let { strategies } = storeToRefs(strategiesStore);
   const endpoint = 'positions'
   const wait = 0
@@ -236,6 +238,7 @@ export const usePositionsStore = defineStore('positions', () => {
   async function sqOffPosition() {
     try {
       await makeRequest(endpoint, "POST", dataForSqOff.value, {}, {}, 0, null);
+      await manaulPositionsStore.getManualPosition()
       return "success"
 
     } catch (error) {

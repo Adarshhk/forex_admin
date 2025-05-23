@@ -20,6 +20,8 @@
     <!-- Desktop Navigation -->
     <div class="hidden xl:block nrml-text">
       <RouterLink class="py-2 rounded-md px-4 transition-all duration-300" to="/"
+        :class="[currentRoute.name === 'dashboard' ? 'text-custom-blue' : 'border-white/0']">Dashboard</RouterLink>
+      <RouterLink class="py-2 rounded-md px-4 transition-all duration-300" to="/users"
         :class="[currentRoute.name === 'users' ? 'text-custom-blue' : 'border-white/0']">Users</RouterLink>
       <RouterLink class="py-2 rounded-md px-4 transition-all duration-300" to="/deployed-strategies"
         :class="[currentRoute.name === 'deployed-strategies' ? 'text-custom-blue' : 'border-white/0']">
@@ -37,7 +39,7 @@
     <div class="relative flex justify-between space-x-2 sm:space-x-4">
       <button @click="isNotificationsOpen = !isNotificationsOpen" class="">
         <div class="w-8 sm:w-10 bg-[#2C2736] rounded-lg">
-          <LottieAnimation animationPath="/src/assets/animation/notification.json" />
+          <LottieAnimation animationPath="/animations/notification.json" />
         </div>
       </button>
       <button @click="isDropdownOpen = !isDropdownOpen">
@@ -130,7 +132,10 @@
         </button>
       </div>
       <div class="flex flex-col space-y-2">
-        <RouterLink class="py-3 px-4 rounded-md transition-all duration-300 hover:bg-white/10" to="/"
+         <RouterLink class="py-3 px-4 rounded-md transition-all duration-300 hover:bg-white/10" to="/"
+          :class="[currentRoute.name === 'dashboard' ? 'text-custom-blue bg-white/5' : '']"
+          @click="isMobileMenuOpen = false">Dashboard</RouterLink>
+        <RouterLink class="py-3 px-4 rounded-md transition-all duration-300 hover:bg-white/10" to="/users"
           :class="[currentRoute.name === 'users' ? 'text-custom-blue bg-white/5' : '']"
           @click="isMobileMenuOpen = false">Users</RouterLink>
         <RouterLink class="py-3 px-4 rounded-md transition-all duration-300 hover:bg-white/10" to="/deployed-strategies"

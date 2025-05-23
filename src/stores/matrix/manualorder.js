@@ -81,6 +81,14 @@ export const useManualOrderStore = defineStore('manual_order', () => {
         }
     }
 
+    const placeOrder = async (order) => {
+        try {
+            const res = await makeRequest(endpoint, 'POST', order)
+        } catch (error) {
+            console.log(error, 'Error in manual order store.')
+        }
+    }
+
     getManualOrders();
 
     return {
@@ -93,5 +101,6 @@ export const useManualOrderStore = defineStore('manual_order', () => {
         userManualOrders,
         manualOrders,
         brokerFilterValues,
+        placeOrder,
     }
 })

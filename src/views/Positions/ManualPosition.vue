@@ -79,7 +79,6 @@ import { storeToRefs } from 'pinia';
 import Position from './Position.vue';
 import Dropdown from '@/components/Dropdown.vue';
 import EmptyState from '@/components/EmptyState.vue';
-import { usePositionsStore } from '@/stores/matrix/positions';
 import { useManualPositionStore } from '@/stores/matrix/manualposition';
 
 // Props to receive toggle state from parent

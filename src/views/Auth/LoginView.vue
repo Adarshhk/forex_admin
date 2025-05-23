@@ -52,7 +52,7 @@
               <button type="submit" class="bg-gradient-to-b from-[#00C6FF] to-[#0072FF] rounded-md w-full">
                 <p class="px-6 py-2 m-[1px] rounded-md transition-all duration-300" :class="[isAgree? 'bg-[#0B212C]/20 hover:bg-[#0B212C]/0' : 'bg-[#0B212C]/30 hover:bg-[#0B212C]/10']">Get started</p>
               </button>
-              <div class="text-center text-white/75 text-sm pt-1">Don't have an account? <router-link to="/register" class="text-[#00C6FF]">Register</router-link></div>
+              <!-- <div class="text-center text-white/75 text-sm pt-1">Don't have an account? <router-link to="/register" class="text-[#00C6FF]">Register</router-link></div> -->
             </div>
 
           </form>
@@ -358,12 +358,12 @@ const submitForm = async () => {
 
       if (response?.data) {
           // from backend only user and admin come in role 
-          setTokenAndRole(`Bearer ${response.data?.access_token}`, 'trader');
+          setTokenAndRole(`Bearer ${response.data?.access_token}`, 'admin');
           localStorage.setItem("token", `Bearer ${response.data?.access_token}`);
-          localStorage.setItem("role", 'trader');
+          localStorage.setItem("role", 'admin');
 
           errorMsg.value = "";
-          setisAuthenticated(true, 'trader');
+          setisAuthenticated(true, 'admin');
 
           // websocket connection
           // const tickerStore = useTickerStore();

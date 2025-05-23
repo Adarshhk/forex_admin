@@ -1,82 +1,80 @@
 <script setup>
-import { ref, computed } from 'vue';
-import { RouterLink } from 'vue-router';
-import { useStrategiesStore } from '@/stores/matrix/strategies.js';
-import { useToastStore } from "@/stores/utils/toast";
-import FirstDeploymentPopup from "@/components/FirstDeploymentPopup.vue";
-import FirstDeploymentPopup2 from "@/components/FirstDeploymentPopup2.vue";
-import Eligibilty from "@/components/Eligibilty.vue";
-import StrategyCard from './StrategyCard.vue';
+import { useStrategiesStore } from '@/stores/matrix/strategies';
 import { storeToRefs } from 'pinia';
-import { useTelegramStore } from '@/stores/matrix/telegram';
-import LottieAnimation from '@/components/LottieAnimation.vue';
-import Totalpnl from '@/components/totalpnl.vue';
-import EmptyState from '@/components/EmptyState.vue';
+import StrategyCard from './StrategyCard.vue';
+import { useUserStore } from '@/stores/matrix/users';
+import { computed } from 'vue';
+import { useSubscriptionStore } from '@/stores/matrix/subscription';
+import { useBrokerIndexStore } from '@/stores/matrix/brokers';
+import { useOrderStore } from '@/stores/matrix/orders';
 
-const strategiesStore = useStrategiesStore();
-const { strategies } = storeToRefs(strategiesStore);
-const toastStore = useToastStore();
+const userStore = useUserStore();
+const strategyStore = useStrategiesStore();
+const brokerStore = useBrokerIndexStore();
+const subscriptionStore = useSubscriptionStore();
+const orderStore = useOrderStore();
 
-const telegramStore = useTelegramStore();
+const { subscriptions } = storeToRefs(subscriptionStore);
+const { strategies } = storeToRefs(strategyStore);
+const { users } = storeToRefs(userStore);
+const { brokers } = storeToRefs(brokerStore);
+const { orders } = storeToRefs(orderStore);
 
 
+const activeUsers = computed(() => {
+  return users.value.filter(user => user.is_enable).length;
+});
 
-const checkToast = () => {
-  toastStore.addToast('Error', 'Successfully logged in!', 'error', 300000);
-  toastStore.addToast('Success', 'Your request has been processed successfully', 'success', 300000);
-  toastStore.addToast('Warning', 'Successfully logged in!', 'warning', 300000);
-  toastStore.addToast('Random', 'Successfully logged in!', 'random', 300000);
-};
+const deployedStrategies = computed(() => {
+  const deployed = new Set();
+  subscriptions.value.forEach(subscription => {
+    if (subscription.strategy_id) {
+      deployed.add(subscription.strategy_id);
+    }
+  });
+
+  return deployed.size;
+});
+
+
+const activeBrokers = computed(() => {
+  return brokers.value.filter(broker => broker.is_enabled).length;
+});
 
 </script>
 
 <template>
-  <main class="flex flex-col gap-2">
-    <div class="">
-      <div class="title-text flex items-center p-4 justify-between">
-        <div>
-
-          <h2>PnL (Profit and Loss)</h2>
-          <p class="text-xs italic text-[#ffffff55]">
-            This PNL data is the average of all trades placed across accounts or brokers.
-          </p>
-        </div>
-        <!-- <p class="text-custom-green">+6357.09</p> -->
-         <Totalpnl/>
+  <div class=" overflow-hidden p-2">
+    <div class="w-full grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+      <div class="bg-white/10 shadow-md rounded-lg p-4 col-span-1">
+        <h2 class="text-xl font-bold">{{ activeUsers }}/{{ users.length }}</h2>
+        <p class="text-sm text-white/80">Users Active</p>
+        <RouterLink to="/users" class="mt-2 text-sm text-custom-blue underline">See all</RouterLink>
       </div>
-      
-    </div>
-
-    <div class="border-t  border-white/15 h-[80vh]">
-      <div class="flex items-center justify-between  border-white/15 p-4">
-        <h1 class="font-bold text-lg">Strategies Hub</h1>
-        <div class="flex items-center space-x-4">
-          <button 
-            class="gap-2  rounded-lg flex items-center justify-center small-btn-gradient">
-            <div class="w-8 h-8">
-              <LottieAnimation animationPath="/src/assets/animation/arrow.json" />
-            </div>
-          </button>
-        </div>
+      <div class="bg-white/10 shadow-md rounded-lg p-4 col-span-1">
+        <h2 class="text-xl font-bold">{{deployedStrategies}}/{{ strategies.length }}</h2>
+        <p class="text-sm text-white/80">Strategy Deployed</p>
+        <RouterLink to="/deployed-strategies" class="mt-2 text-sm text-custom-blue underline">See all</RouterLink>
       </div>
-
-      <div v-if="strategies.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-2 xl:pb-24 overflow-y-auto p-4">
-        <StrategyCard :strategy="item" v-for="(item, index) in strategies" :key="index" />
+      <div class="bg-white/10 shadow-md rounded-lg p-4 col-span-1">
+        <h2 class="text-xl font-bold">{{activeBrokers}}/{{ brokers.length }}</h2>
+        <p class="text-sm text-white/80">Brokers Active</p>
+        <RouterLink to="/brokers" class="mt-2 text-sm text-custom-blue underline">See all</RouterLink>
       </div>
-      <div v-else>
-        <EmptyState/>
+      <div class="bg-white/10 shadow-md rounded-lg p-4 col-span-1">
+        <h2 class="text-xl font-bold">{{ orders.length }}</h2>
+        <p class="text-sm text-white/80">Orders Executed</p>
+        <RouterLink to="/orders" class="mt-2 text-sm text-custom-blue underline">See all</RouterLink>
       </div>
     </div>
 
-  </main>
+    <!-- strategy table -->
+
+    <div class="h-[70vh] overflow-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 bg-white/10 shadow-md rounded-lg">
+      <StrategyCard v-for="strategy in strategies" :key="strategy.id" :strategy="strategy" />
+    </div>
+  </div>
 </template>
 
 
-<style scoped>
-.text-gradient-top-bottom {
-  background: linear-gradient(to bottom, #00C6FF, #0072FF);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-</style>
+<style scoped></style>

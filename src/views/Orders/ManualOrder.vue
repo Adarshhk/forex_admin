@@ -25,65 +25,65 @@
                     class="flex items-center justify-center bg-gradient-to-b nrml-text from-[#00C6FF] to-[#0072FF] rounded-lg w-fit text-nowrap">
                     <i class="p-2 lg:pl-2 pi pi-plus"></i>
                     <p class="pr-2 hidden lg:block pl-1 py-2 nrml-text">Place Order</p>
-            </button>
-            <div class="hidden md:flex items-center justify-end col-span-4 space-x-1">
-                <!-- Status Filter -->
-                <div class="relative">
-                    <button @click="isStatusDropdownOpen = !isStatusDropdownOpen"
-                        class="inline-flex items-center bg-white/15 rounded-md text-sm px-2 py-1 text-nowrap">
-                        Status
-                        <i class="pi pi-chevron-down ml-2"></i>
-                    </button>
-                    <Dropdown v-model="isStatusDropdownOpen">
-                        <button @click="() => { filters.status = ''; isStatusDropdownOpen = false }"
-                            :class="{ 'bg-white/10': filters.status == '' }"
-                            class="block text-left px-4 py-2 text-sm text-white hover:bg-[#ffffff11] w-full rounded">All</button>
-                        <button @click="() => { filters.status = 'pending'; isStatusDropdownOpen = false }"
-                            :class="{ 'bg-white/10': filters.status == 'pending' }"
-                            class="block text-left px-4 py-2 text-sm text-white hover:bg-[#ffffff11] w-full rounded">Pending</button>
-                        <button @click="() => { filters.status = 'success'; isStatusDropdownOpen = false }"
-                            :class="{ 'bg-white/10': filters.status == 'success' }"
-                            class="block text-left px-4 py-2 text-sm text-white hover:bg-[#ffffff11] w-full rounded">Success</button>
-                        <button @click="() => { filters.status = 'rejected'; isStatusDropdownOpen = false }"
-                            :class="{ 'bg-white/10': filters.status == 'rejected' }"
-                            class="block text-left px-4 py-2 text-sm text-white hover:bg-[#ffffff11] w-full rounded">Rejected</button>
-                    </Dropdown>
-                </div>
+                </button>
+                <div class="hidden md:flex items-center justify-end col-span-4 space-x-1">
+                    <!-- Status Filter -->
+                    <div class="relative">
+                        <button @click="isStatusDropdownOpen = !isStatusDropdownOpen"
+                            class="inline-flex items-center bg-white/15 rounded-md text-sm px-2 py-1 text-nowrap">
+                            Status
+                            <i class="pi pi-chevron-down ml-2"></i>
+                        </button>
+                        <Dropdown v-model="isStatusDropdownOpen">
+                            <button @click="() => { filters.status = ''; isStatusDropdownOpen = false }"
+                                :class="{ 'bg-white/10': filters.status == '' }"
+                                class="block text-left px-4 py-2 text-sm text-white hover:bg-[#ffffff11] w-full rounded">All</button>
+                            <button @click="() => { filters.status = 'pending'; isStatusDropdownOpen = false }"
+                                :class="{ 'bg-white/10': filters.status == 'pending' }"
+                                class="block text-left px-4 py-2 text-sm text-white hover:bg-[#ffffff11] w-full rounded">Pending</button>
+                            <button @click="() => { filters.status = 'success'; isStatusDropdownOpen = false }"
+                                :class="{ 'bg-white/10': filters.status == 'success' }"
+                                class="block text-left px-4 py-2 text-sm text-white hover:bg-[#ffffff11] w-full rounded">Success</button>
+                            <button @click="() => { filters.status = 'rejected'; isStatusDropdownOpen = false }"
+                                :class="{ 'bg-white/10': filters.status == 'rejected' }"
+                                class="block text-left px-4 py-2 text-sm text-white hover:bg-[#ffffff11] w-full rounded">Rejected</button>
+                        </Dropdown>
+                    </div>
 
-                <!-- Broker Filter -->
-                <div class="relative">
-                    <button @click="isBrokerDropdownOpen = !isBrokerDropdownOpen"
-                        class="inline-flex items-center bg-white/15 rounded-md text-sm px-2 py-1 text-nowrap">
-                        Brokers
-                        <i class="pi pi-chevron-down ml-2"></i>
-                    </button>
+                    <!-- Broker Filter -->
+                    <div class="relative">
+                        <button @click="isBrokerDropdownOpen = !isBrokerDropdownOpen"
+                            class="inline-flex items-center bg-white/15 rounded-md text-sm px-2 py-1 text-nowrap">
+                            Brokers
+                            <i class="pi pi-chevron-down ml-2"></i>
+                        </button>
 
-                    <Dropdown v-model="isBrokerDropdownOpen">
-                        <button @click="() => { filters.broker_id = ''; isBrokerDropdownOpen = false }"
-                            :class="{ 'bg-white/10': filters.broker_id == '' }"
-                            class="block text-left px-4 py-2 text-sm text-white hover:bg-[#ffffff11] w-full rounded">All</button>
-                        <button @click="() => { filters.broker_id = broker.id; isBrokerDropdownOpen = false }"
-                            v-for="broker in brokerFilterValues" :key="broker.id"
-                            :class="{ 'bg-white/10': filters.broker_id == broker.id }"
-                            class="block text-left px-4 py-2 text-sm text-white hover:bg-[#ffffff11] w-full rounded">{{
-                                broker.broker_name }}</button>
-                    </Dropdown>
+                        <Dropdown v-model="isBrokerDropdownOpen">
+                            <button @click="() => { filters.broker_id = ''; isBrokerDropdownOpen = false }"
+                                :class="{ 'bg-white/10': filters.broker_id == '' }"
+                                class="block text-left px-4 py-2 text-sm text-white hover:bg-[#ffffff11] w-full rounded">All</button>
+                            <button @click="() => { filters.broker_id = broker.id; isBrokerDropdownOpen = false }"
+                                v-for="broker in brokerFilterValues" :key="broker.id"
+                                :class="{ 'bg-white/10': filters.broker_id == broker.id }"
+                                class="block text-left px-4 py-2 text-sm text-white hover:bg-[#ffffff11] w-full rounded">{{
+                                    broker.broker_name }}</button>
+                        </Dropdown>
+                    </div>
                 </div>
+                <button
+                    class="flex md:hidden items-center justify-center small-btn-gradient2 p-1 xs:p-1.5 border border-white/10 rounded-[10px] xl:rounded-full text-nowrap">
+                    <img src="/svg/filter.svg" alt="filter" class="w-6 h-6" />
+                </button>
             </div>
-            <button
-                class="flex md:hidden items-center justify-center small-btn-gradient2 p-1 xs:p-1.5 border border-white/10 rounded-[10px] xl:rounded-full text-nowrap">
-                <img src="/svg/filter.svg" alt="filter" class="w-6 h-6" />
-            </button>
-            </div>
-            
+
         </div>
 
         <!-- order list -->
         <OrderRow v-if="filteredOrders.length" :order="order" v-for="order in filteredOrders" :key="order.id" />
-        <EmptyState v-else/>
+        <EmptyState v-else />
 
         <!-- mobile view -->
-        <div class="md:hidden border-t border-white/15">
+        <!-- <div class="md:hidden border-t border-white/15">
             <div v-if="manualOrders.length" v-for="item in manualOrders" :key="item.id"
                 class="flex justify-between text-sm w-full px-4 py-2 border-b border-white/20">
                 <div>
@@ -128,9 +128,9 @@
             <div v-else>
                 No Data Found
             </div>
-        </div>
+        </div> -->
     </div>
-    <BuySellModal i/>
+    <BuySellModal i />
 </template>
 
 <script setup>
@@ -156,7 +156,7 @@ const props = defineProps({
 const emit = defineEmits(['update-toggle']);
 
 const updateToggle = (value) => {
-    emit("update-toggle" , value);
+    emit("update-toggle", value);
 }
 
 // Filter dropdowns state
@@ -172,8 +172,8 @@ const filters = ref({
 // Get manual order data from store
 const manualOrderStore = useManualOrderStore();
 const orderStore = useOrderStore();
-const {showTradeModal } = storeToRefs(orderStore);
-const { manualOrders , brokerFilterValues} = storeToRefs(manualOrderStore);
+const { showTradeModal } = storeToRefs(orderStore);
+const { manualOrders, brokerFilterValues } = storeToRefs(manualOrderStore);
 
 
 // Filtered orders based on selected filters

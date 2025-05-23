@@ -170,7 +170,7 @@
                 <!-- <button @click="handleSubmit"
                     class="md:hidden min-w-[93px] w-full text-sm px-6 py-2 rounded-md bg-gradient-to-b from-[#00C6FF] to-[#0072FF] opacity-80">Done</button> -->
 
-                <button @click.stop="handleSubmit" type="button" v-if="selectedItems.length > 0"
+                <button @click="handleSubmit" type="button" v-if="selectedItems.length > 0"
                     class="min-w-[93px] col-span-2 w-full text-sm px-6 py-2 rounded-md "
                     :class="{ 'bg-[#2ab425]': tradeMode == 'buy', 'bg-[#d94a4a]': tradeMode == 'sell' }">Place
                     Order</button>
@@ -192,15 +192,17 @@ import { onClickOutside } from '@vueuse/core';
 import Checkbox from './Checkbox.vue';
 import { useBrokerIndexStore } from '@/stores/matrix/brokers';
 import { useJoinerStore } from '@/stores/matrix/joiners';
-import { usePositionsStore } from '@/stores/matrix/positions';
 import { useStrategiesStore } from '@/stores/matrix/strategies';
+import { useManualOrderStore } from '@/stores/matrix/manualorder';
+import { useManualPositionStore } from '@/stores/matrix/manualposition';
 
 const orderStore = useOrderStore();
+const manaulOrderStore = useManualOrderStore();
+const manualPositionStore = useManualPositionStore();
 const strategiesStore = useStrategiesStore();
 const brokerStore = useBrokerIndexStore();
 const joinerStore = useJoinerStore();
 const tickerStore = useTickerStore();
-const positionStore = usePositionsStore();
 
 
 const { strategies } = storeToRefs(strategiesStore);
@@ -310,7 +312,7 @@ const handleSubmit = () => {
     // Make sure symbol and signal_type are current
     formData.value.signal_type = tradeMode.value;
 
-    orderStore.placeOrder(formData.value)
+    manaulOrderStore.placeOrder(formData.value)
         .then(() => {
             // Reset form data after successful order placement
             formData.value.volume = '';
@@ -321,7 +323,7 @@ const handleSubmit = () => {
             formData.value.broker_ids = [];
             formData.value.strategy_ids = [];
             closeModal();
-            positionStore.getPositions()
+            manualPositionStore.getManualPosition()
         })
         .catch((error) => {
             console.error('Error placing order:', error);

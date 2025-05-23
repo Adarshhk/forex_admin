@@ -41,7 +41,7 @@
       </div>
       <button v-else @click="showConfirmModal = true"
         class=" border border-[#D94a4a] rounded-full px-2 capitalize font-bold text-xs py-1 bg-white/10 text-[#D94a4a] flex items-center">
-        <img src="/public/svg/close.svg" class="w-4" alt=""> Close
+        <img src="/public/svg/close.svg" class="w-4" alt=""> <span class="hidden md:block">Close</span>
       </button>
     </div>
 

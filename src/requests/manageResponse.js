@@ -7,7 +7,6 @@ if (!pinia) {
 }
 
 import { ref } from 'vue';
-import { computed } from 'vue';
 import { useProfileStore } from '@/stores/matrix/profile';
 import { useMyStrategiesStore } from '@/stores/matrix/myStrategies.js';
 import { useBrokerIndexStore } from '@/stores/matrix/brokers';
@@ -27,6 +26,8 @@ import { useWatchlistStore } from '@/stores/matrix/watchlist.js';
 import { useJoinerStore } from '@/stores/matrix/joiners.js';
 import { useWatchlistJoinerStore } from '@/stores/matrix/watchlistjoiner.js';
 import { useUserStore } from '@/stores/matrix/users.js';
+import { useManualOrderStore } from '@/stores/matrix/manualorder.js';
+import { useManualPositionStore } from '@/stores/matrix/manualposition.js';
 
 const statusMessages = {
   200: 'Success: ',
@@ -57,7 +58,10 @@ const getMethods = ref({
   watchlist : 'getWatchlists',
   watchlistJoiners : 'getWatchlistJoiners',
   joiners : 'getJoiners',
-  users : 'getUsers'
+  users : 'getUsers',
+  manualOrders : 'getManualOrders',
+  manualPositions : 'getManualPosition',
+
 });
 
 function showToast(toastTitle, message, toastType, duration=3000) {
@@ -86,6 +90,8 @@ setTimeout(() => {
     watchlistJoiners : useWatchlistJoinerStore,
     joiners : useJoinerStore,
     users : useUserStore,
+    manualOrders : useManualOrderStore,
+    manualPositions : useManualPositionStore,
   };
 }, 100);
 
