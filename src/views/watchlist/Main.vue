@@ -46,7 +46,7 @@
     <div v-else class="flex flex-col justify-center items-center ">
 
       <div class="h-44">
-        <LottieAnimation animationPath="/src/assets/not-found.json" />
+        <LottieAnimation animationPath="/animations/not-found.json" />
 
       </div>
       <div class="flex flex-col items-center justify-center text-center p-4">

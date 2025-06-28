@@ -2,7 +2,7 @@
     <div class="flex flex-col justify-center min-h-80 items-center h-full w-full">
 
       <div class="h-44">
-        <LottieAnimation animationPath="/src/assets/not-found.json" />
+        <LottieAnimation animationPath="/animations/not-found.json" />
 
       </div>
       <div class="flex flex-col items-center justify-center text-center p-4">

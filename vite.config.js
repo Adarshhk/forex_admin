@@ -15,7 +15,7 @@ export default defineConfig({
   },
   server: {
     host: 'localhost', // Listen on all network interfaces
-    port: 7500, // Choose any available port
+    port: 8000, // Choose any available port
   },
   resolve: {
     alias: {
